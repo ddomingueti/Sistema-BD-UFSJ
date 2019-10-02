@@ -1,5 +1,5 @@
 <?php
-include "../model/Uusuario_DAO.php"
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/usuario_DAO.php"
 
 class UsuarioController {
     private var $usuarioDao = null

@@ -1,5 +1,5 @@
 <?php
-include "../model/prova_DAO.php"
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/prova_DAO.php"
 
 class ProvaController {
 

@@ -1,20 +1,32 @@
 <?php
-include "../model/area_DAO.php";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/area_DAO.php";
 
 class AreaController {
-    var $areaDao = null;
+    private $areaDao;
+    private $result;
 
     public function __construct() {
-        $areaDao = new AreaDao();
+        $this->areaDao = new AreaDao();
     }
 
-    public function adicionarArea() { }
+    public function adicionarArea($nome_area) {
+        $result = $this->areaDao->adicionar_area($nome_area);
+        return $result;
+    }
 
-    public function removerArea($area) { }
+    public function remover_area($nome_area) { 
+        $result = $this->areaDao->remover_area($nome_area);
+        return $result;
+    }
 
-    public function alterarArea($area) { }
+    public function alterar_area($id, $nome_area_alterado) {
+        $result = $this->areaDao->alterar_area($id, $nome_area_alterado);
+        return $result;
+    }
 
-    public function buscarArea($area) { }
-
+    public function buscar_area($area) {
+        $result = $this->areaDao->buscar_area($area);
+        return $result;
+    }
 }
 ?>

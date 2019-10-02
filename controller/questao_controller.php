@@ -1,5 +1,5 @@
 <?php
-include "../model/questao_DAO.php";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/questao_DAO.php";
 
 class QuestaoController {
     private var $questaoDao = null;

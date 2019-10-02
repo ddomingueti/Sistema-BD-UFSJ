@@ -1,5 +1,6 @@
 <?php
-include "../conexao.php";
+require "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
+
 class ProvaDao {
 
     public function __construct() { }

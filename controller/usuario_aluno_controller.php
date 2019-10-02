@@ -1,5 +1,5 @@
 <?php
-include "../model/usuario_aluno_dao.php";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/usuario_aluno_dao.php";
 
 class AlunoController {
 

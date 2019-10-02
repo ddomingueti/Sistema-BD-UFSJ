@@ -1,10 +1,10 @@
 <?php
-include "../model/avaliacao_DAO.php";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model//model/avaliacao_DAO.php";
 include "usuario_controller.php";
 
 class AvaliacaoController {
-    private var $avaliacaoDao = null;
-    private var $usuario_controller = null;
+    private $avaliacaoDao = null;
+    private $usuario_controller = null;
 
     public function __construct() { 
         $avaliacaoDao = new AvaliacaoDao();

@@ -1,6 +1,6 @@
 <?php
-include "../model/avaliacao_controller.php";
-include "../model/usuario_controller.php";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/avaliacao_controller.php";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/usuario_controller.php";
 
 class ProfessorController {
 
