@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `data_nasc` date NOT NULL,
   `id_area` int(11) NULL,
   `tipo_ingresso` varchar(2) NULL,
+  `tipo_usuario` int(11) NOT NULL,
   PRIMARY KEY (`cpf`),
   FOREIGN KEY (id_area) REFERENCES area(id)
 ) ENGINE=innoDB;

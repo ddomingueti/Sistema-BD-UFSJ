@@ -1,10 +1,9 @@
 <?php
 include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
-//include "avaliacao_controller.php";
-//include "prova_controller.php";
-//include "questao_controller.php";
-//include "usuario_controller.php";
-//include "../model/usuario_DAO";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/avaliacao_controller.php";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/prova_controller.php";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_controller.php";
 
 class AdministradorController {
 
@@ -17,10 +16,10 @@ class AdministradorController {
 
     public function __construct() {
         $this->areaController = new AreaController();
-        //$avaliacaoController = new AvaliacaoController();
-        //$provaController = new ProvaController();
-        //$questaoController = new QuestaoController();
-        //$usuarioController = new UsuarioController();
+        $this->avaliacaoController = new AvaliacaoController();
+        $this->provaController = new ProvaController();
+        $this->questaoController = new QuestaoController();
+        $this->usuarioController = new UsuarioController();
 
     }
 
