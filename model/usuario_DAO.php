@@ -54,8 +54,6 @@ class UsuarioDao {
             $stmt->bindParam(':data_nasc', $data['data_nasc']);
             $stmt->bindParam(':id_area', $data['id_area']);
             $stmt->bindParam(':tipo_ing', $data['tipo_ingresso']);
-            $stmt->bindParam(':tipo_usuario', $data['tipo_usuario']);
-            
             
             $s = $stmt->execute();
             var_dump($s); 

@@ -88,8 +88,32 @@ class QuestaoDao {
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();
         }
-
-
+    }
+    
+    public function buscarQuestaoArea($data) {
+        $query = 'SELECT * from questoes where id_area=:id_area';
+        try {
+            $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+            $stmt->bindParam(':id_area', $data['id_area']);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOException $e) {
+            return "Erro: ".$e->getMessage();
+        }
     }
 
+    public function alterarNumAcertos($data) {
+        $query = 'UPDATE questoes SET num_acertos=:num_acertos WHERE id=:id';
+        try {
+            $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+            $stmt->bindParam(':id', $data['id']);
+            $stmt->bindParam(':num_acertos', $data['num_acertos']);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOException $e) {
+            return "Erro: ".$e->getMessage();
+        }
+    }
 }

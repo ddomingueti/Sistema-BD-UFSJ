@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `area` (
   PRIMARY KEY (`id`)
 ) ENGINE=innoDB AUTO_INCREMENT=1;
 
+ALTER TABLE `area` ADD UNIQUE(`nome`);
 
 -- --------------------------------------------------------
 

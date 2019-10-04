@@ -5,11 +5,11 @@ require "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
 
 class AreaDao {
 
-    public function adicionar_area($nome_area) { 
+    public function adicionarArea($data) { 
         $query = 'INSERT INTO area (nome) VALUES (:nome)';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':nome', $nome_area);
+            $stmt->bindParam(':nome', $data['nome']);
             $result = $stmt->execute();
             return $result;
         } catch (PDOEXception $e) {
@@ -17,11 +17,11 @@ class AreaDao {
         }
     }
 
-    public function remover_area ($area_id) {
+    public function removerArea ($data) {
         $query = 'DELETE FROM area WHERE id = :id';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':id', $area_id);
+            $stmt->bindParam(':id', $data['id']);
             $e = $stmt->execute();
             $result = $stmt->fetchAll();
 
@@ -31,12 +31,12 @@ class AreaDao {
         }
     }
 
-    public function alterar_area($id, $nome_novo) { 
+    public function alterarArea($data) { 
         $query = 'UPDATE area SET nome = :nome_novo WHERE id=:id';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':nome_novo', $nome_novo);
-            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':nome_novo', $data['nome']);
+            $stmt->bindParam(':id', $data['id']);
             $stmt->execute();
             $result = $stmt->fetchAll();
             return $result;
@@ -45,15 +45,26 @@ class AreaDao {
         }
     }
 
-    public function buscar_area($nome_area) { 
-        $query = 'SELECT * FROM area WHERE nome=:nome';
-        if ($nome_area == null) {
+    public function buscarArea($data) { 
+        
+        $query = null;
+        if ($data['id'] == null && $data['nome'] != null)
+            $query = 'SELECT * FROM area WHERE nome=:nome';
+        else if ($data['id'] != null)
+            $query = 'SELECT * from area WHERE id=:id';
+        else if ($data['id'] == null && $data['nome'] == null)
             $query = 'SELECT * FROM area WHERE 1';
-        }
+        
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            if ($nome_area != null)
-                $stmt->bindParam(':nome', $nome_area);
+            if ($data['id'] != null)
+                $stmt->bindParam(':id', $data['id']);
+            else if ($data['nome'] != null)
+                $stmt->bindParam(':nome', $data['nome']);
+            else {
+                $stmt->bindParam(':nome', $data['nome']);
+                $stmt->bindParam(':id', $data['id']);
+            }
             
             $stmt->execute();
             $result = $stmt->fetchAll();

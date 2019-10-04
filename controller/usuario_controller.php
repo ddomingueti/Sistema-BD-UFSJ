@@ -26,8 +26,9 @@ class UsuarioController {
         return $ret;
     }
 
-    public function removerUsuario($cpf) { 
-        $ret = $this->usuarioDao->removerUsuario($cpf);
+    public function removerUsuario($cpf) {
+        $data = [ "cpf" => $cpf ];
+        $ret = $this->usuarioDao->removerUsuario($data);
         return $ret;
     }
 
@@ -42,7 +43,6 @@ class UsuarioController {
             "data_nasc" => $data_nasc,
             "id_area" => $id_area,
             "tipo_ingresso" => $tipo_ingresso,
-            "tipo_usuario" => $tipo_usuario,
         ];
         $ret = $this->usuarioDao->alterarUsuario($data);
         return $ret;
