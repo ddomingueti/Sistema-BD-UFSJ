@@ -10,22 +10,22 @@ class AreaController {
     }
 
     public function adicionarArea($nome_area) {
-        $result = $this->areaDao->adicionar_area($nome_area);
+        $result = $this->areaDao->adicionarArea($nome_area);
         return $result;
     }
 
-    public function remover_area($nome_area) { 
-        $result = $this->areaDao->remover_area($nome_area);
+    public function removerArea($nome_area) { 
+        $result = $this->areaDao->removerArea($nome_area);
         return $result;
     }
 
-    public function alterar_area($id, $nome_area_alterado) {
-        $result = $this->areaDao->alterar_area($id, $nome_area_alterado);
+    public function alterarArea($id, $nome_area_alterado) {
+        $result = $this->areaDao->alterarArea($id, $nome_area_alterado);
         return $result;
     }
 
-    public function buscar_area($area) {
-        $result = $this->areaDao->buscar_area($area);
+    public function buscarArea($area) {
+        $result = $this->areaDao->buscarArea($area);
         return $result;
     }
 }

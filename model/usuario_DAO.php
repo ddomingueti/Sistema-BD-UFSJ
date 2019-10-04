@@ -1,36 +1,37 @@
 <?php
-require "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
 
 class UsuarioDao {
 
-    public function adicionarUsuario($nome, $email, $cpf, $idade, $senha, $sexo, $data_nasc, $id_area, $tipo_ingresso) { 
-        $query = 'INSERT INTO usuario (nome, email, cpf, idade, senha, sexo, data_nasc, id_area, tipo_ingresso) 
-        VALUES (:nome, :email, :cpf, :idade, :senha, :sexo, :data_nasc, :id_area, tipo_ingresso)';
+    public function adicionarUsuario($data) { 
+        $query = 'INSERT INTO usuario (nome, email, cpf, idade, senha, sexo, data_nasc, id_area, tipo_ingresso, tipo_usuario) 
+        VALUES (:nome, :email, :cpf, :idade, :senha, :sexo, :data_nasc, :id_area, :tipo_ingresso, :tipo_usuario)';
         
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':nome', $nome);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':cpf', $cpf);
-            $stmt->bindParam(':senha', $senha);
-            $stmt->bindParam(':sexo', $sexo);
-            $stmt->bindParam(':idade', $idade);
-            $stmt->bindParam(':data_nasc', $data_nasc);
-            $stmt->bindParam(':id_area', $id_area);
-            $stmt->bindParam(':tipo_ingresso', $tipo_ingresso);
+            $stmt->bindParam(':nome', $data['nome']);
+            $stmt->bindParam(':email', $data['email']);
+            $stmt->bindParam(':cpf', $data['cpf']);
+            $stmt->bindParam(':senha', $data['senha']);
+            $stmt->bindParam(':sexo', $data['sexo']);
+            $stmt->bindParam(':idade', $data['idade']);
+            $stmt->bindParam(':data_nasc', $data['data_nasc']);
+            $stmt->bindParam(':id_area', $data['id_area']);
+            $stmt->bindParam(':tipo_ingresso', $data['tipo_ingresso']);
+            $stmt->bindParam(':tipo_usuario', $data['tipo_usuario']);
             
-            $result = $stmt->execute();
+            $stmt->execute();
+            $result = $stmt->fetchAll();
             return $result;
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();
         }
     }
 
-    public function removerUsuario($cpf) {
+    public function removerUsuario($data) {
         $query = 'DELETE FROM usuario WHERE cpf = :cpf';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':cpf', $cpf);
+            $stmt->bindParam(':cpf', $data['cpf']);
             $e = $stmt->execute();
             $result = $stmt->fetchAll();
             return $result;
@@ -39,22 +40,25 @@ class UsuarioDao {
         }
     }
 
-    public function alterarUsuario($nome, $email, $cpf, $idade, $senha, $sexo, $data_nasc, $id_area, $tipo_ingresso) {
-        $query = 'UPDATE usuario SET nome=:nome, email=:email, senha:senha, sexo:sexo, data_nasc:data_nasc, id_area:id_area, tipo_ingresso:tipo_ing) 
+    public function alterarUsuario($data) {
+        $query = 'UPDATE usuario SET nome=:nome, email=:email, idade=:idade, senha=:senha, sexo=:sexo, data_nasc=:data_nasc, id_area=:id_area, tipo_ingresso=:tipo_ing 
                     WHERE cpf=:cpf';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':nome', $nome);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':cpf', $cpf);
-            $stmt->bindParam(':senha', $senha);
-            $stmt->bindParam(':sexo', $sexo);
-            $stmt->bindParam(':idade', $idade);
-            $stmt->bindParam(':data_nasc', $data_nasc);
-            $stmt->bindParam(':id_area', $id_area);
-            $stmt->bindParam(':tipo_ingresso', $tipo_ingresso);
+            $stmt->bindParam(':nome', $data['nome']);
+            $stmt->bindParam(':email', $data['email']);
+            $stmt->bindParam(':cpf', $data['cpf']);
+            $stmt->bindParam(':senha', $data['senha']);
+            $stmt->bindParam(':sexo', $data['sexo']);
+            $stmt->bindParam(':idade', $data['idade']);
+            $stmt->bindParam(':data_nasc', $data['data_nasc']);
+            $stmt->bindParam(':id_area', $data['id_area']);
+            $stmt->bindParam(':tipo_ing', $data['tipo_ingresso']);
+            $stmt->bindParam(':tipo_usuario', $data['tipo_usuario']);
             
-            $stmt->execute();
+            
+            $s = $stmt->execute();
+            var_dump($s); 
             $result = $stmt->fetchAll();
             return $result;
         } catch (PDOEXception $e) {
@@ -63,16 +67,15 @@ class UsuarioDao {
         
     }
 
-    public function buscarUsuario($cpf, $senha) {         
-        $query = 'SELECT * FROM usuario WHERE cpf=:cpf and senha=:senha';
-        if ($cpf == null and $senha == null) {
+    public function buscarUsuario($data) {         
+        $query = 'SELECT * FROM usuario WHERE cpf=:cpf';
+        if ($cpf == null) {
             $query = 'SELECT * FROM usuario WHERE 1';
         }
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            if ($cpf != null and $senha != null) {
-                $stmt->bindParam(':cpf', $cpf);
-                $stmt->bindParam(':senha', $senha);
+            if ($cpf != null) {
+                $stmt->bindParam(':cpf', $data['cpf']);
             }
             
             $stmt->execute();

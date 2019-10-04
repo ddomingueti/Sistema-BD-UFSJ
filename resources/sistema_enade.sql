@@ -46,7 +46,7 @@ DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE IF NOT EXISTS `usuario` (
   `nome` varchar(50) DEFAULT NULL,
   `email` varchar(50) NOT NULL,
-  `cpf` int(11) NOT NULL,
+  `cpf` varchar(11) NOT NULL,
   `idade` int(11) NOT NULL,
   `senha` varchar(20) NOT NULL,
   `sexo` char(1) NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `avaliacao` (
   `comentario` varchar(200) NOT NULL,
   `nota` float NOT NULL,
   `data` date NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_usuario` varchar(11) NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (id_usuario) REFERENCES usuario(cpf)
 ) ENGINE=innoDB;
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `prova` (
   `data` date NOT NULL,
   `finalizada` tinyint(1) NOT NULL,
   `num_acertos` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_usuario` varchar(11) NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (id_usuario) REFERENCES usuario(cpf)
 ) ENGINE=innoDB;

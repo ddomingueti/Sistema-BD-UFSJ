@@ -1,6 +1,5 @@
 <?php
 require "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
-include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/area.php"
 //Data Access Object de Area
 //Faz a consulta na base de dados e retorna o resultado da consulta
 
