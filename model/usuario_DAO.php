@@ -56,7 +56,6 @@ class UsuarioDao {
             $stmt->bindParam(':tipo_ing', $data['tipo_ingresso']);
             
             $s = $stmt->execute();
-            var_dump($s); 
             $result = $stmt->fetchAll();
             return $result;
         } catch (PDOEXception $e) {
@@ -67,12 +66,12 @@ class UsuarioDao {
 
     public function buscarUsuario($data) {         
         $query = 'SELECT * FROM usuario WHERE cpf=:cpf';
-        if ($cpf == null) {
+        if ($data['cpf'] == null) {
             $query = 'SELECT * FROM usuario WHERE 1';
         }
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            if ($cpf != null) {
+            if ($data['cpf'] != null) {
                 $stmt->bindParam(':cpf', $data['cpf']);
             }
             
@@ -84,5 +83,4 @@ class UsuarioDao {
             return "Erro: ".$e->getMessage();
         }
     }
-
 }

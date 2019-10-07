@@ -54,4 +54,32 @@ class UsuarioController {
         $ret = $this->usuarioDao->buscarUsuario($data);
         return $ret;
     }
+
+    public function realizarLogin($cpf, $senha) {
+        $ret = $this->buscarUsuario($cpf);
+        $data = ['success' => false, 'area' => null, 'msg' => ""];
+        if (count($ret) == 1) {
+            $return_area = null;
+            if ($senha == $ret[0]['senha']) {
+                if ($ret[0]['tipo_usuario'] == 0)
+                    $return_area = "view/adm.html";
+                else if ($ret[0]['tipo_usuario'] == 1)
+                    $return_area = "view/adm.html";
+                else if ($ret[0]['tipo_usuario'] == 2)
+                    $return_area = "view/professor.html";
+                else if ($ret[0]['tipo_usuario'] == 3)
+                    $return_area = "view/pro-reitor.html";
+                $data['success'] = true;
+                $data['area'] = $return_area;
+                $data['msg'] = "Bem vindo!";
+            } else {
+                $data['success'] = false;
+                $data['area'] = null;
+                $data['msg'] = "Senha inválida";
+            }
+        } else {
+            $data['msg'] = "Usuário inválido";
+        }
+        return $data;
+    }
 }
