@@ -50,7 +50,6 @@ class UsuarioController {
 
     public function buscarUsuario($cpf) {
         $data = [ "cpf" => $cpf, ];
-
         $ret = $this->usuarioDao->buscarUsuario($data);
         return $ret;
     }
@@ -62,13 +61,13 @@ class UsuarioController {
             $return_area = null;
             if ($senha == $ret[0]['senha']) {
                 if ($ret[0]['tipo_usuario'] == 0)
-                    $return_area = "view/adm.html";
+                    $return_area = "view/adm.php";
                 else if ($ret[0]['tipo_usuario'] == 1)
-                    $return_area = "view/adm.html";
+                    $return_area = "view/aluno.php";
                 else if ($ret[0]['tipo_usuario'] == 2)
-                    $return_area = "view/professor.html";
+                    $return_area = "view/professor.php";
                 else if ($ret[0]['tipo_usuario'] == 3)
-                    $return_area = "view/pro-reitor.html";
+                    $return_area = "view/pro-reitor.php";
                 $data['success'] = true;
                 $data['area'] = $return_area;
                 $data['msg'] = "Bem vindo!";

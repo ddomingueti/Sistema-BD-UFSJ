@@ -1,3 +1,7 @@
+<?php
+    require_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,7 +30,7 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="adm.html">Bem vindo!</a>
+    <a class="navbar-brand mr-1" href="adm.html">TreinaEnade - Área do Administrador</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
@@ -69,14 +73,29 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="view_adm/charts.html">
           <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
+          <span>Relatórios</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+            <a class="nav-link" href="view_usuario/table.php">
+              <i class="fas fa-fw fa-table"></i>
+              <span>Usuários</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="view_area/table.php">
           <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
+          <span>Áreas</span></a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="view_questao/table.php">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Questões</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="view_prova/table.php">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Provas</span></a>
       </li>
     </ul>
 

@@ -21,7 +21,7 @@ class AreaController {
     }
 
     public function alterarArea($id, $nome_area_alterado) {
-        $data = [ "id" => $id, "nome_area" => $nome_area_alterado, ];
+        $data = [ "id" => $id, "nome" => $nome_area_alterado, ];
         $result = $this->areaDao->alterarArea($data);
         return $result;
     }
@@ -29,6 +29,12 @@ class AreaController {
     public function buscarArea($id, $nome) {
         $data = ["nome" => $nome, "id" => $id, ];
         $result = $this->areaDao->buscarArea($data);
+        return $result;
+    }
+
+    public function buscarNomeArea($id) {
+        $data = ["id" => $id, ];
+        $result = $this->areaDao->buscarNomeArea($data);
         return $result;
     }
 }

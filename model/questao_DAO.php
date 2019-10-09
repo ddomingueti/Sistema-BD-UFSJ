@@ -104,7 +104,7 @@ class QuestaoDao {
     }
 
     public function alterarNumAcertos($data) {
-        $query = 'UPDATE questoes SET num_acertos=:num_acertos WHERE id=:id';
+        $query = 'UPDATE questoes SET num_acertos=:num_acertos WHERE id=:id ORDER BY id';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':id', $data['id']);
