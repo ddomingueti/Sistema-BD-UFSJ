@@ -13,7 +13,7 @@ class QuestaoDao {
             $stmt->bindParam(':id_area', $data['id_area']);
             $stmt->bindParam(':tipo', $data['tipo']);
             $stmt->bindParam(':enunciado', $data['enunciado']);
-            $stmt->bindParam(':resposta', $$data['resposta']);
+            $stmt->bindParam(':resposta', $data['resposta']);
             $stmt->bindParam(':num_acertos', $data['num_acertos']);
             $stmt->bindParam(':a', $data['a']);
             $stmt->bindParam(':b', $data['b']);

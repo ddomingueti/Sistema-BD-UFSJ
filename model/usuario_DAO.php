@@ -45,7 +45,7 @@ class UsuarioDao {
 
     public function alterarUsuario($data) {
         $query = 'UPDATE usuario SET nome=:nome, email=:email, idade=:idade, senha=:senha, sexo=:sexo, data_nasc=:data_nasc, id_area=:id_area, tipo_ingresso=:tipo_ing 
-                    WHERE cpf=:cpf ORDER BY cpf';
+                    WHERE cpf=:cpf';
         try {
             if ($data['id_area'] == '-')
                 $data['id_area'] = null;
