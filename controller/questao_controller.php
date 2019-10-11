@@ -8,20 +8,7 @@ class QuestaoController {
         $this->questaoDao = new QuestaoDao();
     }
 
-    public function adicionarQuestao($id, $id_area, $enunciado, $tipo, $resposta, $a, $b, $c, $d, $e, $caminho_imagens) { 
-        $data = [
-            "id" => $id,
-            "id_area" => $id_area,
-            "enunciado" => $enunciado,
-            "tipo" => $tipo,
-            "resposta" => $resposta,
-            "a" => $a,
-            "b" => $b,
-            "c" => $c,
-            "d" => $d,
-            "e" => $e,
-            "caminho_imagens" => $caminho_imagens,
-        ];
+    public function adicionarQuestao($data) { 
         $res = $this->questaoDao->adicionarQuestao($data);
         return $res;
 
@@ -33,20 +20,7 @@ class QuestaoController {
         return $res;
     }
 
-    public function alterarQuestao($id, $id_area, $enunciado, $tipo, $resposta, $a, $b, $c, $d, $e, $caminho_imagens) { 
-        $data = [
-            "id" => $id,
-            "id_area" => $id_area,
-            "enunciado" => $enunciado,
-            "tipo" => $tipo,
-            "resposta" => $resposta,
-            "a" => $a,
-            "b" => $b,
-            "c" => $c,
-            "d" => $d,
-            "e" => $e,
-            "caminho_imagens" => $caminho_imagens,
-        ];
+    public function alterarQuestao($data) { 
         $res = $this->alterarQuestao($data);
         return $res;
     }
@@ -54,5 +28,6 @@ class QuestaoController {
     public function buscarQuestao($id) { 
         $data = [ "id" => $id, ];
         $res = $this->questaoDao->buscarQuestao($data);
+        return $res;
     }
 }

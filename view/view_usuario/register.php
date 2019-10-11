@@ -65,29 +65,29 @@
 
 <div class="container">
     <div class="card card-register mx-auto mt-5">
-      <div class="card-header">Alterar área existente</div>
+      <div class="card-header">Cadastrar um novo usuário</div>
       <div class="card-body">
       <form action="" method="POST">
         <div class="form-group">
-            <div class="form-row">
+            <div class="form-row" style="padding-bottom:10px;">
                 <label for="inputCpf" class="col-sm-2 col-form-label">CPF</label>
                 <div class="col-sm-10">
                 <input type="text" class="form-control" id="inputCpf" name="cpf">
                 </div>
             </div>
-            <div class="form-row">
+            <div class="form-row" style="padding-bottom:10px;">
                 <label for="inputNome" class="col-sm-2 col-form-label">Nome</label>
                 <div class="col-sm-10">
                 <input type="text" class="form-control" id="inputNome" name="nome">
                 </div>
             </div>
-            <div class="form-row">
+            <div class="form-row" style="padding-bottom:10px;">
                 <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-10">
                 <input type="text" class="form-control" id="inputEmail" name="email">
                 </div>
             </div>
-            <div class="form-row">
+            <div class="form-row" style="padding-bottom:10px;">
                 <label for="inputIdade" class="col-sm-2 col-form-label">Idade</label>
                 <div class="col-sm-2">
                 <input type="text" class="form-control" id="inputIdade" name="idade">
@@ -99,7 +99,7 @@
                 </div>
                 </div>
             </div>
-            <div class="form-row"> 
+            <div class="form-row" style="padding-bottom:10px;"> 
                 <label for="inputSexo" class="col-sm-2 col-form-label">Sexo</label>
                 <div class="input-group sm-3" style="width: auto;">
                 <select class="custom-select" id="inputSexo" name="sexo">
@@ -119,14 +119,14 @@
                 </div>
             </div>
 
-            <div class="form-row"> 
+            <div class="form-row" style="padding-bottom:10px;"> 
                 <label for="inputSenha" class="col-sm-2 col-form-label">Senha</label>
                 <div class="col-sm-10">
                 <input type="password" class="form-control" id="inputSenha" name="senha">
                 </div>
             </div>
 
-            <div class="form-row">
+            <div class="form-row" style="padding-bottom:10px;">
             <label for="inputTipoIngresso" class="col-sm-2 col-form-label">Tipo de Ingresso</label>
                 <div class="input-group sm-3" style="width: auto;">
                 <select class="custom-select" id="inputTipoUsuario" name="tipo_ingresso">
@@ -145,7 +145,7 @@
                 </div>
             </div>
 
-            <div class="form-row"> 
+            <div class="form-row" style="padding-bottom:10px;"> 
                 <label for="inputArea" class="col-sm-2 col-form-label">Área de atuação</label>
                 <div class="input-group sm-2" style="width: auto;">
                     <select class="custom-select" id="inputArea" name="area">
@@ -159,7 +159,7 @@
                 </div>
             </div>
 
-            <div class="form-row">
+            <div class="form-row" style="padding-bottom:10px;">
                 <button class="btn btn-primary btn-block" type="submit" name="cadastrar">Cadastrar</button>
             </div>
         </div>

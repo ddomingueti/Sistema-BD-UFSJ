@@ -1,6 +1,6 @@
 <?php
-    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_controller.php";
-    $usuarioController = new UsuarioController();
+    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
+    $questaoController = new QuestaoController();
 ?>
 
 
@@ -135,7 +135,7 @@
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i>
-            Tabela de Usuários<br>
+            Tabela de Questões<br>
             <button type='button' class='btn btn-secondary btn-sm' onclick="location.href='register.php';">Cadastrar novo registro</button>
         </div>
 
@@ -144,71 +144,47 @@
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                   <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>CPF</th>
-                    <th>Idade</th>
-                    <th>Senha</th>
-                    <th>Sexo</th>
-                    <th>Data de nascimento</th>
-                    <th>Área relacionada</th>
-                    <th>Tipo de ingresso</th>
-                    <th>Tipo de usuário</th>
-                    <th>Remover</th>
-                    <th>Alterar</th>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Nome da Área</th>
+                    <th class="text-center">Tipo</th>
+                    <th class="text-center">Enunciado</th>
+                    <th class="text-center">Resposta</th>
+                    <th class="text-center">Número de acertos</th>
+                    <th class="text-center">Alterar</th>
+                    <th class="text-center">Remover</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <th class="text-center">Nome</th>
-                    <th class="text-center">Email</th>
-                    <th class="text-center">CPF</th>
-                    <th class="text-center">Idade</th>
-                    <th class="text-center">Senha</th>
-                    <th class="text-center">Sexo</th>
-                    <th class="text-center">Data de nascimento</th>
-                    <th class="text-center">Área relacionada</th>
-                    <th class="text-center">Tipo de ingresso</th>
-                    <th class="text-center">Tipo de usuário</th>
-                    <th class="text-center">Remover</th>
+                  <th class="text-center">ID</th>
+                    <th class="text-center">Nome da Área</th>
+                    <th class="text-center">Tipo</th>
+                    <th class="text-center">Enunciado</th>
+                    <th class="text-center">Resposta</th>
+                    <th class="text-center">Número de acertos</th>
                     <th class="text-center">Alterar</th>
+                    <th class="text-center">Remover</th>
                   </tr>
                 </tfoot>
                 <tbody>
                 <?php
-                    $ret = $usuarioController->buscarUsuario(null);
+                    $ret = $questaoController->buscarQuestao(null);
+                    var_dump($ret);
                     for ($i=0; $i < count($ret); $i++) {
-                    echo "<tr>";
-                    echo "<td><center>".$ret[$i]['nome']."</center></td>";
-                    echo "<td><center>".$ret[$i]['email']."</center></td>";
-                    echo "<td><center>".$ret[$i]['cpf']."</center></td>";
-                    echo "<td><center>".$ret[$i]['idade']."</center></td>";
-                    echo "<td><center>".$ret[$i]['senha']."</center></td>";
-                    echo "<td><center>".$ret[$i]['sexo']."</center></td>";
-                    echo "<td><center>".$ret[$i]['data_nasc']."</center></td>";
-                    echo "<td><center>".$ret[$i]['id_area']."</center></td>";
-                    echo "<td><center>".$ret[$i]['tipo_ingresso']."</center></td>";
-                    
-                    if ($ret[$i]['tipo_usuario'] == 0) {
-                        $ret[$i]['tipo_usuario'] = 'Administrador';
-                    } else if ($ret[$i]['tipo_usuario'] == 1) {
-                        $ret[$i]['tipo_usuario'] = 'Aluno';
-                    } else if ($ret[$i]['tipo_usuario'] == 2) {
-                        $ret[$i]['tipo_usuario'] = 'Professor';
-                    } else {
-                        $ret[$i]['tipo_usuario'] = 'Pró-Reitor';
-                    }
-                    
-                    echo "<td>".$ret[$i]['tipo_usuario']."</td>";
-                    echo "<td><center><a href='remove.php?cpf=".$ret[$i]['cpf']."'>Remover</a></center></td>";
-                    echo "<td><center><a href='change.php?cpf=".$ret[$i]['cpf']."'>Alterar</a></center></td>";
-                    echo "</tr>";
+                        echo "<tr>";
+                        echo "<td><center>".$ret[$i]['id']."</center></td>";
+                        echo "<td><center>".$ret[$i]['id_area']."</center></td>";
+                        echo "<td><center>".$ret[$i]['tipo']."</center></td>";
+                        echo "<td><center>".$ret[$i]['enunciado']."</center></td>";
+                        echo "<td><center>".$ret[$i]['resposta']."</center></td>";
+                        echo "<td><center>".$ret[$i]['num_acertos']."</center></td>";
+                        echo "<td><center><a href='remove.php?id=".$ret[$i]['id']."'>Remover</a></center></center></td>";
+                        echo "<td><center><a href='change.php?id=".$ret[$i]['id']."'>Alterar</a></center></center></td>";
+                        echo "</tr>";
                     }
                 ?>
                 </tbody>
               </table>
-              
-            
             </div>
           </div>
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>

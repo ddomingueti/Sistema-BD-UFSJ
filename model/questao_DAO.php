@@ -1,20 +1,20 @@
 <?php
+    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
 
 class QuestaoDao {
 
-
     public function adicionarQuestao($data) { 
-        $query = 'INSERT INTO questoes (id, id_area, tipo, enunciado, resposta, num_acertos, a, b, c, d, e) 
-        VALUES (:id, :id_area, :tipo, :enunciado, :resposta, :num_acertos, :a, :b, :c, :d, :e)';
+        $query = 'INSERT INTO questoes (id_area, tipo, enunciado, resposta, num_acertos, a, b, c, d, e) 
+        VALUES (:id_area, :tipo, :enunciado, :resposta, :num_acertos, :a, :b, :c, :d, :e)';
 
         try {
+            $acertos = 0;
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':id', $data['id']);
             $stmt->bindParam(':id_area', $data['id_area']);
             $stmt->bindParam(':tipo', $data['tipo']);
             $stmt->bindParam(':enunciado', $data['enunciado']);
             $stmt->bindParam(':resposta', $data['resposta']);
-            $stmt->bindParam(':num_acertos', $data['num_acertos']);
+            $stmt->bindParam(':num_acertos', $acertos);
             $stmt->bindParam(':a', $data['a']);
             $stmt->bindParam(':b', $data['b']);
             $stmt->bindParam(':c', $data['c']);
@@ -23,7 +23,17 @@ class QuestaoDao {
             
             $e = $stmt->execute();
             $result = $stmt->fetchAll();
+            if ($e) {
+                $id = Conexao::get_instance()->get_conexao()->lastInsertId();
+                $caminho = $_SERVER['DOCUMENT_ROOT'].'/sistema-bd-ufsj/resources/'.$data['id_area'].'/'.$id;
+                mkdir($caminho, 0777, true);
 
+                $query = 'UPDATE questoes SET caminho_imagens=:caminho WHERE id=:id';
+                $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+                $stmt->bindParam(':id', $id);
+                $stmt->bindParam(':caminho', $caminho);
+                $stmt->execute();
+            }
             return $result;
         } catch (PDOException $e) {
             return "Erro: ".$e->getMessage();
@@ -31,12 +41,30 @@ class QuestaoDao {
     }
 
     public function removerQuestao($data) { 
+        $questao = $this->buscarQuestao($data);
+        var_dump
+        $dir = $questao[0]['caminho_imagens'];
+        
         $query = 'DELETE FROM questoes WHERE id = :id';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':id', $data['id']);
             $e = $stmt->execute();
             $result = $stmt->fetchAll();
+                    
+            if (is_dir($dir)) {
+                
+                $objects = scandir($dir); 
+                foreach ($objects as $object) { 
+                    if ($object != "." && $object != "..") { 
+                        if (is_dir($dir."/".$object) && !is_link($dir."/".$object))
+                        rrmdir($dir."/".$object);
+                        else
+                        unlink($dir."/".$object); 
+                    }
+                }
+                rmdir($dir); 
+            }
 
             return $result;
         } catch (PDOException $e) {
@@ -77,13 +105,21 @@ class QuestaoDao {
 
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            if ($cpf != null) {
+            if ($data['id'] != null) {
                 $stmt->bindParam(':id', $data['id']);
             }
             
             $stmt->execute();
             $result = $stmt->fetchAll();
-
+            
+            for ($i=0; $i<count($result); $i++) {
+                $query = 'SELECT nome from area WHERE id=:id_area';
+                $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+                $stmt->bindParam(':id_area', $result[$i]['id_area']);
+                $stmt->execute();
+                $res_nomes = $stmt->fetchAll();
+                $result[$i]['id_area'] = $res_nomes[0]['nome'];
+            }
             return $result;
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();

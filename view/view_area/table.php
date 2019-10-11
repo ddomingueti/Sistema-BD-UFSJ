@@ -136,7 +136,7 @@
           <div class="card-header">
             <i class="fas fa-table"></i>
             Tabela de áreas<br>
-            <button type='button' class='btn btn-secondary btn-sm' onclick="location.href='register.php';">Cadastrar área</button>
+            <button type='button' class='btn btn-secondary btn-sm' onclick="location.href='register.php';">Cadastrar novo registro</button>
         </div>
 
           <div class="card-body">

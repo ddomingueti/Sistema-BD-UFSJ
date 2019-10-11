@@ -40,15 +40,16 @@
       <div class="card-header">Cadastrar uma nova área</div>
       <div class="card-body">
         <form action="" method="post">
-          <div class="form-group">
+            <div class="form-row" style="padding-bottom:10px;">
+                <label for="inputArea" class="col-sm-3 col-form-label">Nome da área</label>
+                <div class="col-sm-9">
+                <input type="text" class="form-control" id="inputArea" name="nome">
+                </div>
+            </div>  
             <div class="form-row">
-              <div class="col-md-6">
-              <div class="form-label-group">
-                <input type="text" id="nome" name="nome" class="form-control" placeholder="Nome da área" required>
-                <label for="nome">Nome da Área</label>
-              </div>
-              </div>
-              <button class="btn btn-primary btn-block" type="submit" name="cadastrar">Cadastrar</button>
+                <button class="btn btn-primary btn-block" type="submit" name="cadastrar">Cadastrar</button>
+            </div>
+          
         </form>
       </div>
     </div>

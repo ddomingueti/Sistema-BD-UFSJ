@@ -32,10 +32,9 @@ DROP TABLE IF EXISTS `area`;
 CREATE TABLE IF NOT EXISTS `area` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  CONSTRAINT pk_area PRIMARY KEY (`id`),
+  UNIQUE(`nome`)
 ) ENGINE=innoDB AUTO_INCREMENT=1;
-
-ALTER TABLE `area` ADD UNIQUE(`nome`);
 
 -- --------------------------------------------------------
 
@@ -55,8 +54,8 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `id_area` int(11) NULL,
   `tipo_ingresso` varchar(2) NULL,
   `tipo_usuario` int(11) NOT NULL,
-  PRIMARY KEY (`cpf`),
-  FOREIGN KEY (id_area) REFERENCES area(id)
+  CONSTRAINT pk_usuario PRIMARY KEY (`cpf`),
+  CONSTRAINT fk_usu_area FOREIGN KEY (id_area) REFERENCES area(id) ON DELETE SET NULL
 ) ENGINE=innoDB;
 
 -- --------------------------------------------------------
@@ -72,8 +71,9 @@ CREATE TABLE IF NOT EXISTS `avaliacao` (
   `nota` float NOT NULL,
   `data` date NOT NULL,
   `id_usuario` varchar(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (id_usuario) REFERENCES usuario(cpf)
+  CONSTRAINT pk_usu PRIMARY KEY (`id`),
+  FOREIGN KEY (id_usuario) REFERENCES usuario(cpf),
+  CONSTRAINT fk_usu_prova FOREIGN KEY (id_usuario) ON DELETE CASCADE
 ) ENGINE=innoDB;
 
 -- --------------------------------------------------------
@@ -89,8 +89,8 @@ CREATE TABLE IF NOT EXISTS `prova` (
   `finalizada` tinyint(1) NOT NULL,
   `num_acertos` int(11) NOT NULL,
   `id_usuario` varchar(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (id_usuario) REFERENCES usuario(cpf)
+  CONSTRAINT pk_prova PRIMARY KEY (`id`),
+  CONSTRAINT fk_prova_usu FOREIGN KEY (id_usuario) REFERENCES usuario(cpf) ON DELETE CASCADE
 ) ENGINE=innoDB;
 
 -- --------------------------------------------------------
@@ -114,7 +114,9 @@ CREATE TABLE IF NOT EXISTS `questoes` (
   `e` varchar(500) NULL,
   `caminho_imagens` varchar(20000) NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (id_area) REFERENCES area(id)
+  FOREIGN KEY (id_area) REFERENCES area(id),
+  CONSTRAINT fk_questao_area FOREIGN KEY (id_area) ON DELETE CASCADE,
+  CONSTRAINT pk_questao PRIMARY KEY(id)
 ) ENGINE=innoDB;
 
 -- --------------------------------------------------------
@@ -128,7 +130,9 @@ CREATE TABLE IF NOT EXISTS `formada_por` (
   `id_prova` int(11) NOT NULL,
   `id_questao` int(11) NOT NULL,
   FOREIGN KEY (id_prova) REFERENCES prova(id),
-  FOREIGN KEY (id_questao) REFERENCES questoes(id)
+  FOREIGN KEY (id_questao) REFERENCES questoes(id),
+  CONSTRAINT fk_formada_prova FOREIGN KEY (id_prova) ON DELETE CASCADE,
+  CONSTRAINT fk_formada_questao FOREIGN KEY (id_questao) ON DELETE CASCADE
 ) ENGINE=innoDB;
 
 
