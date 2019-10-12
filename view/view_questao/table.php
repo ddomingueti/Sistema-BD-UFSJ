@@ -169,7 +169,6 @@
                 <tbody>
                 <?php
                     $ret = $questaoController->buscarQuestao(null);
-                    var_dump($ret);
                     for ($i=0; $i < count($ret); $i++) {
                         echo "<tr>";
                         echo "<td><center>".$ret[$i]['id']."</center></td>";

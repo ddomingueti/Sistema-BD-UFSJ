@@ -42,7 +42,6 @@ class QuestaoDao {
 
     public function removerQuestao($data) { 
         $questao = $this->buscarQuestao($data);
-        var_dump
         $dir = $questao[0]['caminho_imagens'];
         
         $query = 'DELETE FROM questoes WHERE id = :id';
@@ -73,23 +72,22 @@ class QuestaoDao {
     }
 
     public function alterarQuestao($data) { 
-
-        $query = 'UPDATE questoes SET id=:id id_area=:id_area, tipo=:tipo, enunciado=:enunciado, resposta=:resposta, num_acertos=:num_acertos, a=:a, b=:b, c=:c, d=:d, e=:e
+        $query = 'UPDATE questoes SET id=:id, id_area=:id_area, tipo=:tipo, enunciado=:enunciado, resposta=:resposta, a=:a, b=:b, c=:c, d=:d, e=:e
                     WHERE id=:id';
         try {
+            var_dump($data);
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':id', $data['id']);
             $stmt->bindParam(':id_area', $data['id_area']);
             $stmt->bindParam(':tipo', $data['tipo']);
             $stmt->bindParam(':enunciado', $data['enunciado']);
-            $stmt->bindParam(':resposta', $$data['resposta']);
-            $stmt->bindParam(':num_acertos', $data['num_acertos']);
+            $stmt->bindParam(':resposta', $data['resposta']);
             $stmt->bindParam(':a', $data['a']);
             $stmt->bindParam(':b', $data['b']);
             $stmt->bindParam(':c', $data['c']);
             $stmt->bindParam(':d', $data['d']);
             $stmt->bindParam(':e', $data['e']);
-            $stmt->execute();
+            $r = $stmt->execute();
             $result = $stmt->fetchAll();
             return $result;
         } catch (PDOEXception $e) {

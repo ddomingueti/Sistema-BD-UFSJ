@@ -20,8 +20,8 @@ class QuestaoController {
         return $res;
     }
 
-    public function alterarQuestao($data) { 
-        $res = $this->alterarQuestao($data);
+    public function alterarQuestao($data) {
+        $res = $this->questaoDao->alterarQuestao($data);
         return $res;
     }
 
