@@ -1,6 +1,6 @@
 <?php
-    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
-    $questaoController = new QuestaoController();
+    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/prova_controller.php";
+    $provaController = new ProvaController();
 ?>
 
 
@@ -135,7 +135,7 @@
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i>
-            Tabela de Questões<br>
+            Tabela de Provas<br>
             <button type='button' class='btn btn-secondary btn-sm' onclick="location.href='register.php';">Cadastrar novo registro</button>
         </div>
 
@@ -145,37 +145,37 @@
                 <thead>
                   <tr>
                     <th class="text-center">ID</th>
-                    <th class="text-center">Nome da Área</th>
-                    <th class="text-center">Tipo</th>
-                    <th class="text-center">Enunciado</th>
-                    <th class="text-center">Resposta</th>
-                    <th class="text-center">Número de acertos</th>
-                    <th class="text-center">Alterar</th>
+                    <th class="text-center">Usuário</th>
+                    <th class="text-center">Data</th>
+                    <th class="text-center">Finalizada</th>
+                    <th class="text-center">Quantidade de questões</th>
+                    <th class="text-center">Nota</th>
                     <th class="text-center">Remover</th>
+                    <th class="text-center">Alterar</th>
                   </tr>
                 </thead>
                 <tfoot>
-                  <tr>
-                  <th class="text-center">ID</th>
-                    <th class="text-center">Nome da Área</th>
-                    <th class="text-center">Tipo</th>
-                    <th class="text-center">Enunciado</th>
-                    <th class="text-center">Resposta</th>
-                    <th class="text-center">Número de acertos</th>
-                    <th class="text-center">Alterar</th>
+                    <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Usuário</th>
+                    <th class="text-center">Data</th>
+                    <th class="text-center">Finalizada</th>
+                    <th class="text-center">Quantidade de questões</th>
+                    <th class="text-center">Nota</th>
                     <th class="text-center">Remover</th>
+                    <th class="text-center">Alterar</th>
                   </tr>
                 </tfoot>
                 <tbody>
                 <?php
-                    $ret = $questaoController->buscarQuestao(null, true);
+                    $ret = $provaController->buscarProva(null);
                     for ($i=0; $i < count($ret); $i++) {
                         echo "<tr>";
                         echo "<td><center>".$ret[$i]['id']."</center></td>";
-                        echo "<td><center>".$ret[$i]['id_area']."</center></td>";
-                        echo "<td><center>".$ret[$i]['tipo']."</center></td>";
-                        echo "<td><center>".$ret[$i]['enunciado']."</center></td>";
-                        echo "<td><center>".$ret[$i]['resposta']."</center></td>";
+                        echo "<td><center>".$ret[$i]['id_usuario']."</center></td>";
+                        echo "<td><center>".$ret[$i]['data']."</center></td>";
+                        echo "<td><center>".$ret[$i]['finalizada']."</center></td>";
+                        echo "<td><center>".$ret[$i]['num_questoes']."</center></td>";
                         echo "<td><center>".$ret[$i]['num_acertos']."</center></td>";
                         echo "<td><center><a href='remove.php?id=".$ret[$i]['id']."'>Remover</a></center></center></td>";
                         echo "<td><center><a href='change.php?id=".$ret[$i]['id']."'>Alterar</a></center></center></td>";

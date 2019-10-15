@@ -1,11 +1,11 @@
 <?php
-//require "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
+require_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
 //Data Access Object de Area
 //Faz a consulta na base de dados e retorna o resultado da consulta
 
 class AreaDao {
 
-    public function adicionarArea($data) { 
+    public function adicionarArea($data) {
         $query = 'INSERT INTO area (nome) VALUES (:nome)';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);

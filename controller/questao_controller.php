@@ -1,5 +1,5 @@
 <?php
-include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/questao_DAO.php";
+//include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/questao_DAO.php";
 
 class QuestaoController {
     private $questaoDao = null;
@@ -25,9 +25,15 @@ class QuestaoController {
         return $res;
     }
 
-    public function buscarQuestao($id) { 
-        $data = [ "id" => $id, ];
+    public function buscarQuestao($id, $readble) { 
+        $data = [ "id" => $id, "readble" => $readble];
         $res = $this->questaoDao->buscarQuestao($data);
+        return $res;
+    }
+
+    public function buscarQuestaoArea($id_area) {
+        $data = ["id_area" => $id_area, ];
+        $res = $this->questaoDao->buscarQuestaoArea($data);
         return $res;
     }
 }

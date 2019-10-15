@@ -1,5 +1,5 @@
 <?php
-    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
+require_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
 
 class QuestaoDao {
 
@@ -109,14 +109,15 @@ class QuestaoDao {
             
             $stmt->execute();
             $result = $stmt->fetchAll();
-            
-            for ($i=0; $i<count($result); $i++) {
-                $query = 'SELECT nome from area WHERE id=:id_area';
-                $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-                $stmt->bindParam(':id_area', $result[$i]['id_area']);
-                $stmt->execute();
-                $res_nomes = $stmt->fetchAll();
-                $result[$i]['id_area'] = $res_nomes[0]['nome'];
+            if ($data['readble']) {
+                for ($i=0; $i<count($result); $i++) {
+                    $query = 'SELECT nome from area WHERE id=:id_area';
+                    $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+                    $stmt->bindParam(':id_area', $result[$i]['id_area']);
+                    $stmt->execute();
+                    $res_nomes = $stmt->fetchAll();
+                    $result[$i]['id_area'] = $res_nomes[0]['nome'];
+                }
             }
             return $result;
         } catch (PDOEXception $e) {

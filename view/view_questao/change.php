@@ -17,7 +17,7 @@
     
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $area_nomes = $areaController->buscarArea(null, null);
-        $ret = $questaoController->buscarQuestao($_GET['id']);
+        $ret = $questaoController->buscarQuestao($_GET['id'], true);
         $id_questao = $ret[0]['id'];
         $enunciado = $ret[0]['enunciado'];
         $resposta = $ret[0]['resposta'];

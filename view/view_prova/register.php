@@ -1,3 +1,23 @@
+<?php 
+    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
+    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/prova_controller.php";
+
+    
+    $areaController = new AreaController();
+    $nome_areas = $areaController->buscarArea(null, null);
+    $provaController = new ProvaController();
+
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        var_dump($_POST);
+        $res = $provaController->adicionarProva('12345678910', $_POST['quantidade'], $_POST['area']);
+        
+        if ($res['success']) {
+            header ('Location: prova_questao.php?id_prova='.$res['id_prova'].'&id_questao='.$res['id_questao'][0].'&atual=0');
+        }
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,10 +32,10 @@
   <title>SB Admin - Register</title>
 
   <!-- Custom fonts for this template-->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
   <!-- Custom styles for this template-->
-  <link href="css/sb-admin.css" rel="stylesheet">
+  <link href="../css/sb-admin.css" rel="stylesheet">
 
 </head>
 
@@ -23,53 +43,35 @@
 
   <div class="container">
     <div class="card card-register mx-auto mt-5">
-      <div class="card-header">Register an Account</div>
+      <div class="card-header">Realizar uma prova</div>
       <div class="card-body">
-        <form>
-          <div class="form-group">
-            <div class="form-row">
-              <div class="col-md-6">
-                <div class="form-label-group">
-                  <input type="text" id="firstName" class="form-control" placeholder="First name" required="required" autofocus="autofocus">
-                  <label for="firstName">First name</label>
+        <form method="POST">
+            <div class="form-row" style="padding-bottom:10px;"> 
+                <label for="inputArea" class="col-sm-4 col-form-label">Área de estudo</label>
+                <div class="input-group sm-2" style="width: auto; padding-left:5px;">
+                    <select class="custom-select" id="inputArea" name="area">
+                        <option selected>Nenhuma</option>
+                        <?php 
+                            foreach ($nome_areas as $item) {
+                                echo '<option value="'.$item['id'].'">'.$item['nome'].'</option>';                   
+                            }
+                        ?>
+                    </select>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-label-group">
-                  <input type="text" id="lastName" class="form-control" placeholder="Last name" required="required">
-                  <label for="lastName">Last name</label>
-                </div>
-              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <div class="form-label-group">
-              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required">
-              <label for="inputEmail">Email address</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="form-row">
-              <div class="col-md-6">
-                <div class="form-label-group">
-                  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
-                  <label for="inputPassword">Password</label>
+
+
+            <div class="form-row" style="padding-bottom:10px;">
+                <label for="inputQuantidade" class="col-sm-4 col-form-label">Quantidade</label>
+                <div class="col-sm-4">
+                    <input type="number" class="form-control" id="inputQuantidade" name="quantidade">
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-label-group">
-                  <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm password" required="required">
-                  <label for="confirmPassword">Confirm password</label>
-                </div>
-              </div>
             </div>
-          </div>
-          <a class="btn btn-primary btn-block" href="login.html">Register</a>
+          
+            <div class="form-row" style="padding-bottom:10px;">
+                <button class="btn btn-primary btn-block" type="submit" name="iniciar">Iniciar Prova</button>
+            </div>
         </form>
-        <div class="text-center">
-          <a class="d-block small mt-3" href="login.html">Login Page</a>
-          <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
-        </div>
       </div>
     </div>
   </div>

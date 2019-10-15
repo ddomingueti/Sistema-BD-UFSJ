@@ -1,5 +1,5 @@
 <?php
-require "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
+require_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
 include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/usuario_dao.php";
 
 class AvaliacaoDao {
