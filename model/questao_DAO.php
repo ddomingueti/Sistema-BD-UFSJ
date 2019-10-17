@@ -22,6 +22,7 @@ class QuestaoDao {
             $stmt->bindParam(':e', $data['e']);
             
             $e = $stmt->execute();
+           
             $result = $stmt->fetchAll();
             if ($e) {
                 $id = Conexao::get_instance()->get_conexao()->lastInsertId();

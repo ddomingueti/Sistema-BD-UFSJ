@@ -148,7 +148,6 @@
                     <th>Email</th>
                     <th>CPF</th>
                     <th>Idade</th>
-                    <th>Senha</th>
                     <th>Sexo</th>
                     <th>Data de nascimento</th>
                     <th>Área relacionada</th>
@@ -164,7 +163,6 @@
                     <th class="text-center">Email</th>
                     <th class="text-center">CPF</th>
                     <th class="text-center">Idade</th>
-                    <th class="text-center">Senha</th>
                     <th class="text-center">Sexo</th>
                     <th class="text-center">Data de nascimento</th>
                     <th class="text-center">Área relacionada</th>
@@ -183,7 +181,6 @@
                     echo "<td><center>".$ret[$i]['email']."</center></td>";
                     echo "<td><center>".$ret[$i]['cpf']."</center></td>";
                     echo "<td><center>".$ret[$i]['idade']."</center></td>";
-                    echo "<td><center>".$ret[$i]['senha']."</center></td>";
                     echo "<td><center>".$ret[$i]['sexo']."</center></td>";
                     echo "<td><center>".$ret[$i]['data_nasc']."</center></td>";
                     echo "<td><center>".$ret[$i]['id_area']."</center></td>";

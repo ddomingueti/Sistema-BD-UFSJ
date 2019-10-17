@@ -1,5 +1,5 @@
 <?php
-//include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/questao_DAO.php";
+include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/questao_DAO.php";
 
 class QuestaoController {
     private $questaoDao = null;
@@ -8,7 +8,7 @@ class QuestaoController {
         $this->questaoDao = new QuestaoDao();
     }
 
-    public function adicionarQuestao($data) { 
+    public function adicionarQuestao($data) {
         $res = $this->questaoDao->adicionarQuestao($data);
         return $res;
 

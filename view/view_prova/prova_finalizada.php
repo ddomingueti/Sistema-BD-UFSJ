@@ -60,6 +60,7 @@
                         echo "<td><center>".$ret['num_questao'][$i]."</center></td>";
                         echo "<td><center>".$ret['resposta_usuario'][$i]."</center></td>";
                         echo "<td><center>".$ret['gabarito'][$i]."</center></td>";
+                        
                         echo "</tr>";
                     }
                 ?>

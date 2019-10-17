@@ -10,8 +10,6 @@
         
         $cpf = $_GET['cpf'];
         $usu = $usuarioController->buscarUsuario($cpf);
-        //var_dump($usu);
-        echo "AREA => ".$usu[0]['id_area'];
         if ($usu[0]['tipo_ingresso'] == 2)
             $nome_areas = $areaController->buscarArea(null, null);
         
@@ -142,7 +140,7 @@
             <div class="form-row" style="padding-bottom:10px;"> 
                 <label for="inputSenha" class="col-sm-2 col-form-label">Senha</label>
                 <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputSenha" name="senha">
+                <input type="password" class="form-control" id="inputSenha" name="senha" value="<?php echo $usu[0]['senha'];?>">
                 </div>
             </div>
 

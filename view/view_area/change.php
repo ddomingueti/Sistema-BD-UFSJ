@@ -1,4 +1,5 @@
 <?php
+
 include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
 $areaController = new AreaController();
 $nome = false;

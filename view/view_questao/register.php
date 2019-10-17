@@ -6,8 +6,7 @@
     $area_nomes = null;
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $ret = $questaoController->adicionarQuestao($_POST);
-        var_dump($ret);
-        header ('Location: table.php');
+        //header ('Location: table.php');
     } else {
         $area_nomes = $areaController->buscarArea(null, null);
     }

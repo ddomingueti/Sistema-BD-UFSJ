@@ -16,12 +16,19 @@
         $data_nasc = $_POST['data_nasc'];
         $id_area = $_POST['area'];
         $tipo_ingresso = $_POST['tipo_ingresso'];
-
-        if ($id_area == "Nenhuma") $id_area = null;
-        if ($tipo_ingresso == "Nenhum") $tipo_ingresso = null;
-        $tipo_ingresso = $_POST['tipo_ingresso'];
         $tipo_usuario = $_POST['tipo_usuario'];
+
+        if ($tipo_ingresso == 'N')
+            $tipo_ingresso = null;
         
+        if ($tipo_usuario == 'N')
+            $tipo_usuario = null;
+
+        if ($id_area == 'N')
+            $id_area = null;
+        
+        var_dump($_POST);
+
         if ((strlen($_POST['cpf']) != 11)  || (!is_numeric($_POST['cpf']))) {
             $msg = "Digite um número de CPF válido (11 dígitos)! Exemplo: 01234567891";
         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -30,7 +37,7 @@
             $msg = "A senha deve possuir entre 6 e 20 caracteres";
         } else if ($tipo_usuario != 1 && $tipo_ingresso != null) {
             $msg = "Apenas o usuário aluno deve preencher o campo Tipo de Ingresso!";
-        } else if ($tipo_usuario != 2 && $area_atuacao != null) {
+        } else if ($tipo_usuario != 2 && $id_area != null) {
             $msg = "Apenas o usuário professor deve preencher o campo Área de Atuação!";
         } else {
             $ret = $usuarioController->adicionarUsuario($nome, $email, $cpf, $idade, $senha, $sexo, $data_nasc, $id_area, $tipo_ingresso, $tipo_usuario);
@@ -130,7 +137,7 @@
             <label for="inputTipoIngresso" class="col-sm-2 col-form-label">Tipo de Ingresso</label>
                 <div class="input-group sm-3" style="width: auto;">
                 <select class="custom-select" id="inputTipoUsuario" name="tipo_ingresso">
-                    <option selected>Nenhum</option>    
+                    <option value="N" selected>Nenhum</option>    
                     <option value="A">A</option>
                     <option value="A1">A1</option>
                     <option value="B">B</option>
@@ -149,7 +156,7 @@
                 <label for="inputArea" class="col-sm-2 col-form-label">Área de atuação</label>
                 <div class="input-group sm-2" style="width: auto;">
                     <select class="custom-select" id="inputArea" name="area">
-                        <option selected>Nenhuma</option>
+                        <option value="N" selected>Nenhuma</option>
                         <?php 
                             foreach ($nome_areas as $item) {
                                 echo '<option value="'.$item['id'].'">'.$item['nome'].'</option>';                   

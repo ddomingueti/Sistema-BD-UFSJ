@@ -1,4 +1,6 @@
 <?php
+
+
 require_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
 //Data Access Object de Area
 //Faz a consulta na base de dados e retorna o resultado da consulta
@@ -18,7 +20,7 @@ class AreaDao {
     }
 
     public function removerArea ($data) {
-        $query = 'DELETE FROM area WHERE id = :id';
+        $query = 'DELETE FROM area WHERE id =:id';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':id', $data['id']);
