@@ -15,7 +15,6 @@ class AvaliacaoDao {
             $stmt->bindParam(':data', $data['data']);
             $stmt->bindParam(':id_usuario', $data['id_usuario']);
             $r = $stmt->execute();
-            var_dump($r);
             $result = $stmt->fetchAll();
             return $result;
         } catch (PDOEXception $e) {

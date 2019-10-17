@@ -71,10 +71,12 @@ class UsuarioController {
                 $data['success'] = true;
                 $data['area'] = $return_area;
                 $data['msg'] = "Bem vindo!";
+                $data['tipo_usuario'] = $ret[0]['tipo_usuario'];
             } else {
                 $data['success'] = false;
                 $data['area'] = null;
                 $data['msg'] = "Senha inválida";
+                $data['tipo_usuario'] = null;
             }
         } else {
             $data['msg'] = "Usuário inválido";

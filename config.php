@@ -1,0 +1,4 @@
+<?php
+
+
+$caminhoBase = getcwd();

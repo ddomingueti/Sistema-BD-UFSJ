@@ -1,6 +1,16 @@
 <?php
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/prova_controller.php";
+    
+    /*
+    session_start();
+    if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
+        header('location: ../../index.php');
+    }*/
+
     $provaController = new ProvaController();
+    $ret = null;
+    
+    $ret = $provaController->buscarProvaAluno('12345678910');
 ?>
 
 
@@ -101,32 +111,6 @@
           <span>Dashboard</span>
         </a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Pages</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <h6 class="dropdown-header">Login Screens:</h6>
-          <a class="dropdown-item" href="login.html">Login</a>
-          <a class="dropdown-item" href="register.html">Register</a>
-          <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
-          <div class="dropdown-divider"></div>
-          <h6 class="dropdown-header">Other Pages:</h6>
-          <a class="dropdown-item" href="404.html">404 Page</a>
-          <a class="dropdown-item" href="blank.html">Blank Page</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
-      </li>
     </ul>
 
     <div id="content-wrapper">
@@ -145,30 +129,26 @@
                 <thead>
                   <tr>
                     <th class="text-center">ID</th>
-                    <th class="text-center">Usuário</th>
                     <th class="text-center">Data</th>
                     <th class="text-center">Finalizada</th>
                     <th class="text-center">Quantidade de questões</th>
                     <th class="text-center">Nota</th>
-                    <th class="text-center">Remover</th>
-                    <th class="text-center">Alterar</th>
+                    <th class="text-center">Visualizar Resultados</th>
                   </tr>
                 </thead>
                 <tfoot>
                     <tr>
                     <th class="text-center">ID</th>
-                    <th class="text-center">Usuário</th>
                     <th class="text-center">Data</th>
                     <th class="text-center">Finalizada</th>
                     <th class="text-center">Quantidade de questões</th>
                     <th class="text-center">Nota</th>
-                    <th class="text-center">Remover</th>
-                    <th class="text-center">Alterar</th>
+                    <th class="text-center">Visualizar Resultados</th>
                   </tr>
                 </tfoot>
                 <tbody>
                 <?php
-                    $ret = $provaController->buscarProva(null);
+                    
                     for ($i=0; $i < count($ret); $i++) {
                         echo "<tr>";
                         echo "<td><center>".$ret[$i]['id']."</center></td>";
@@ -177,8 +157,7 @@
                         echo "<td><center>".$ret[$i]['finalizada']."</center></td>";
                         echo "<td><center>".$ret[$i]['num_questoes']."</center></td>";
                         echo "<td><center>".$ret[$i]['num_acertos']."</center></td>";
-                        echo "<td><center><a href='remove.php?id=".$ret[$i]['id']."'>Remover</a></center></center></td>";
-                        echo "<td><center><a href='change.php?id=".$ret[$i]['id']."'>Alterar</a></center></center></td>";
+                        echo '<td><center><button action="window.open("https://www.w3schools.com")>Visualizar</button>'; 
                         echo "</tr>";
                     }
                 ?>

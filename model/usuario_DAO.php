@@ -22,7 +22,6 @@ class UsuarioDao {
             $stmt->bindParam(':tipo_usuario', $data['tipo_usuario']);
             
             $r = $stmt->execute();
-            var_dump($r);
             $result = $stmt->fetchAll();
             return $result;
         } catch (PDOEXception $e) {

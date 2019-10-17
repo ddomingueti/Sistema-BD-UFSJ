@@ -22,7 +22,6 @@ class QuestaoDao {
             $stmt->bindParam(':e', $data['e']);
             
             $e = $stmt->execute();
-           
             $result = $stmt->fetchAll();
             if ($e) {
                 $id = Conexao::get_instance()->get_conexao()->lastInsertId();
@@ -76,7 +75,6 @@ class QuestaoDao {
         $query = 'UPDATE questoes SET id=:id, id_area=:id_area, tipo=:tipo, enunciado=:enunciado, resposta=:resposta, a=:a, b=:b, c=:c, d=:d, e=:e
                     WHERE id=:id';
         try {
-            var_dump($data);
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':id', $data['id']);
             $stmt->bindParam(':id_area', $data['id_area']);

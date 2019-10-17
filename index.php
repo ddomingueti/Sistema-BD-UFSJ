@@ -11,9 +11,17 @@
         } else {
             $ret = $usuario_cont->realizarLogin($_POST['cpf'], $_POST['password']);
             if ($ret['success'] == true) {
+                if (!isset($_SESSION['cpf']))
+                    $_SESSION['cpf'] = $_POST['cpf'];
+                
+                if (!isset($_SESSION['tipo_usuario']))
+                    $_SESSION['tipo_usuario'] = $ret['tipo_usuario'];
+                
                 header ('Location: '.$ret['area']);
             } else {
                 $msg = $ret['msg'];
+                unset($_SESSION['cpf']);
+                unset($_SESSION['tipo_usuario']);
             }
         }
     }

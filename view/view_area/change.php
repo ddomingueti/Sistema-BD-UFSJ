@@ -1,23 +1,22 @@
 <?php
-
 include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
+
+session_start();
+if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
+    header('location: ../../index.php');
+}
+
 $areaController = new AreaController();
 $nome = false;
 $id = false;
 if($_SERVER["REQUEST_METHOD"] == "GET") {
     $nome = $_GET['nome'];
     $id = $_GET['id'];
-    var_dump($_GET);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    var_dump($_POST);
     $ret = $areaController->alterarArea($_POST['id'], $_POST['nome']);
-    if ($ret[0] == 0) {
-        header ('Location: table.php');
-    } else {
-        var_dump($ret);
-    }
+    header ('Location: table.php');    
 }
 ?>
 

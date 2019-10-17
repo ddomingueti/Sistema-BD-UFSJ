@@ -3,6 +3,11 @@
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
 
+    session_start();
+    if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
+        header('location: ../../index.php');
+    }
+
     $usuarioController = new UsuarioController();
     $areaController = new AreaController();
     $nome_areas = null;
@@ -16,7 +21,6 @@
     }
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
-        var_dump($_POST);
         
         $nome = $_POST['nome'];
         $email = $_POST['email'];

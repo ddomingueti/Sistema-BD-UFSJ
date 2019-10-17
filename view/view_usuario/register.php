@@ -1,6 +1,12 @@
 <?php
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
+
+    session_start();
+    if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
+        header('location: ../../index.php');
+    }
+    
     $usuarioController = new UsuarioController();
     $areaController = new AreaController();
     $nome_areas = $areaController->buscarArea(null, null);
@@ -27,7 +33,6 @@
         if ($id_area == 'N')
             $id_area = null;
         
-        var_dump($_POST);
 
         if ((strlen($_POST['cpf']) != 11)  || (!is_numeric($_POST['cpf']))) {
             $msg = "Digite um número de CPF válido (11 dígitos)! Exemplo: 01234567891";

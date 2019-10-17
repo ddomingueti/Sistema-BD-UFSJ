@@ -15,7 +15,7 @@ class QuestaoController {
     }
 
     public function removerQuestao($id) { 
-        $data = [ "id" => $id, ];
+        $data = [ "id" => $id, "readble" => false, ];
         $res = $this->questaoDao->removerQuestao($data);
         return $res;
     }

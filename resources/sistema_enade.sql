@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `questoes` (
   `c` varchar(500) NULL,
   `d` varchar(500) NULL,
   `e` varchar(500) NULL,
-  `caminho_imagens` varchar(20000) NOT NULL,
+  `caminho_imagens` varchar(20000) NULL,
   CONSTRAINT fk_questao_area 
     FOREIGN KEY (id_area) REFERENCES area(id)
     ON DELETE CASCADE,
@@ -136,6 +136,7 @@ DROP TABLE IF EXISTS `formada_por`;
 CREATE TABLE IF NOT EXISTS `formada_por` (
   `id_prova` int(11) NOT NULL,
   `id_questao` int(11) NOT NULL,
+  `resposta_usuario` varchar(1000) NULL,
   CONSTRAINT fk_formada_prova 
     FOREIGN KEY (id_prova)  
     REFERENCES prova(id) 

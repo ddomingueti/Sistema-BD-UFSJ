@@ -2,6 +2,10 @@
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/prova_controller.php";
 
+    session_start();
+    if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
+        header('location: ../../index.php');
+    }
     
     $provaController = new ProvaController();
     $questaoController = new QuestaoController();
@@ -12,7 +16,6 @@
     $questoes = false;
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
-        var_dump($_POST);
         $questoes = $provaController->buscarQuestaoProva($_POST['id_prova']);
         $resposta = false;
         if ($_POST['resposta_a'] != null)
@@ -42,6 +45,7 @@
         $questao_id = $_GET['id_questao'];
         $questao = $questaoController->buscarQuestao($questao_id, false);
         $atual = $_GET['atual'];
+        $editable = $_GET['editable'];
 
     }
 
@@ -109,7 +113,7 @@
             <div style="<?php if ($questao[0]['tipo'] == 'A'){?> display:none;" <?php } ?>>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="resposta_f" id="altA" value="A">
+        <input class="form-check-input" type="radio" name="resposta_f" id="altA" value="A" <?php if($editable) {?> disabled <?php }?>>
                         <label class="form-check-label" for="altA">
                             <?php echo $questao[0]['a']; ?>
                         </label>

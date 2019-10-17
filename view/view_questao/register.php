@@ -1,12 +1,18 @@
 <?php
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
+    
+    session_start();
+    if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
+        header('location: ../../index.php');
+    }
+    
     $questaoController = new QuestaoController();
     $areaController = new AreaController();
     $area_nomes = null;
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $ret = $questaoController->adicionarQuestao($_POST);
-        //header ('Location: table.php');
+        header ('Location: table.php');
     } else {
         $area_nomes = $areaController->buscarArea(null, null);
     }

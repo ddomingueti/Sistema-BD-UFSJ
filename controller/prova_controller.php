@@ -1,6 +1,6 @@
 <?php
 include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/prova_DAO.php";
-include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/questao_DAO.php";
+include_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/questao_DAO.php";
 
 class ProvaController {
 
@@ -85,12 +85,14 @@ class ProvaController {
         $ret = $this->provaDao->alterarRespostaQuestao($data);
         return $ret;
     }
+
     public function calculaResultadoProva($id_prova) {
         $questoes = $this->buscarQuestaoProva($id_prova);
         $notaUsuario = 0;
         $totalQuestoes = 1;
         
         $numQuestoes = array_fill(0, sizeof($questoes), 0);
+        $idQuestoes = array_fill(0, sizeof($questoes), 0);
         $respostasUsuario = array_fill(0, sizeof($questoes), 0);
         $gabarito = array_fill(0, sizeof($questoes), 0);
 
@@ -99,7 +101,8 @@ class ProvaController {
             if (($questoes[$i]['tipo'] == "F") && ($questoes[$i]['resposta'] == $questoes[$i]['resposta_usuario'])) {
                 $notaUsuario = $notaUsuario + 1;
             }
-
+            
+            $idQuestoes[$i] = $questoes[$i]['id'];
             $numQuestoes[$i] = $totalQuestoes;
             $respostasUsuario[$i] = $questoes[$i]['resposta_usuario'];
             $gabarito[$i] = $questoes[$i]['resposta'];
@@ -108,6 +111,7 @@ class ProvaController {
 
         $tabelaResultados = [
             "num_questao" => $numQuestoes,
+            "id_questao" => $idQuestoes,
             "resposta_usuario" => $respostasUsuario,
             "gabarito" => $gabarito,
             "nota" => $notaUsuario,

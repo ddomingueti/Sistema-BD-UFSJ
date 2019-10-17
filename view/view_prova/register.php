@@ -1,7 +1,10 @@
 <?php 
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/prova_controller.php";
-
+    session_start();
+    if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
+        header('location: ../../index.php');
+    }
     
     $areaController = new AreaController();
     $nome_areas = $areaController->buscarArea(null, null);
@@ -9,7 +12,7 @@
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         var_dump($_POST);
-        $res = $provaController->adicionarProva('12345678910', $_POST['quantidade'], $_POST['area']);
+        $res = $provaController->adicionarProva($_SESSION['cpf'], $_POST['quantidade'], $_POST['area']);
         
         if ($res['success']) {
             header ('Location: prova_questao.php?id_prova='.$res['id_prova'].'&id_questao='.$res['id_questao'][0].'&atual=0');

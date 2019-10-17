@@ -1,7 +1,11 @@
 <?php 
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/prova_controller.php";
-
+    
+    session_start();
+    if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
+        header('location: ../../index.php');
+    }
     
     $provaController = new ProvaController();
     $questaoController = new QuestaoController();
@@ -50,17 +54,15 @@
                     <th class="text-center">Questão</th>
                     <th class="text-center">Resposta dada</th>
                     <th class="text-center">Gabarito</th>
-                    <th class="text-center">Visualizar Questão</th>
                   </tr>
                 </thead>
                 <tbody>
                 <?php
                     for ($i=0; $i < sizeof($ret['num_questao']); $i++) {
                         echo "<tr>";
-                        echo "<td><center>".$ret['num_questao'][$i]."</center></td>";
-                        echo "<td><center>".$ret['resposta_usuario'][$i]."</center></td>";
-                        echo "<td><center>".$ret['gabarito'][$i]."</center></td>";
-                        
+                        echo "<td><center>".$ret['num_questao'][$i]."</center></td>\n";
+                        echo "<td><center>".$ret['resposta_usuario'][$i]."</center></td>\n";
+                        echo "<td><center>".$ret['gabarito'][$i]."</center></td>\n";
                         echo "</tr>";
                     }
                 ?>
@@ -79,7 +81,7 @@
               </table>
             </div>
 
-            <button class="btn btn-primary btn-block" href="view/aluno.php">Finalizar Prova</button>
+            <a class="btn btn-primary btn-block" href="table.php">Voltar</a>
 
         </div>
         

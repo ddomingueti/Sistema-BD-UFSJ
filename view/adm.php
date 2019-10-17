@@ -1,5 +1,10 @@
 <?php
     require_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
+    
+    session_start();
+    if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
+        header('location: ../index.php');
+    }
 ?>
 
 <!DOCTYPE html>
