@@ -13,6 +13,8 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 
+IF NOT EXISTS CREATE SCHEMA 'sistema_enade';
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -72,8 +74,9 @@ CREATE TABLE IF NOT EXISTS `avaliacao` (
   `data` date NOT NULL,
   `id_usuario` varchar(11) NOT NULL,
   CONSTRAINT pk_usu PRIMARY KEY (`id`),
-  FOREIGN KEY (id_usuario) REFERENCES usuario(cpf),
-  CONSTRAINT fk_usu_prova FOREIGN KEY (id_usuario) ON DELETE CASCADE
+  CONSTRAINT fk_usu_prova 
+    FOREIGN KEY (id_usuario) REFERENCES usuario('cpf')
+    ON DELETE CASCADE
 ) ENGINE=innoDB;
 
 -- --------------------------------------------------------
@@ -90,7 +93,10 @@ CREATE TABLE IF NOT EXISTS `prova` (
   `num_acertos` int(11) NOT NULL,
   `id_usuario` varchar(11) NOT NULL,
   CONSTRAINT pk_prova PRIMARY KEY (`id`),
-  CONSTRAINT fk_prova_usu FOREIGN KEY (id_usuario) REFERENCES usuario(cpf) ON DELETE CASCADE
+  CONSTRAINT fk_prova_usu 
+    FOREIGN KEY (id_usuario) 
+    REFERENCES usuario(cpf) 
+    ON DELETE CASCADE
 ) ENGINE=innoDB;
 
 -- --------------------------------------------------------
@@ -113,10 +119,11 @@ CREATE TABLE IF NOT EXISTS `questoes` (
   `d` varchar(500) NULL,
   `e` varchar(500) NULL,
   `caminho_imagens` varchar(20000) NOT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (id_area) REFERENCES area(id),
-  CONSTRAINT fk_questao_area FOREIGN KEY (id_area) ON DELETE CASCADE,
-  CONSTRAINT pk_questao PRIMARY KEY(id)
+  CONSTRAINT fk_questao_area 
+    FOREIGN KEY (id_area) REFERENCES area(id)
+    ON DELETE CASCADE,
+  CONSTRAINT pk_questao 
+    PRIMARY KEY(id)
 ) ENGINE=innoDB;
 
 -- --------------------------------------------------------
@@ -129,10 +136,11 @@ DROP TABLE IF EXISTS `formada_por`;
 CREATE TABLE IF NOT EXISTS `formada_por` (
   `id_prova` int(11) NOT NULL,
   `id_questao` int(11) NOT NULL,
-  FOREIGN KEY (id_prova) REFERENCES prova(id),
-  FOREIGN KEY (id_questao) REFERENCES questoes(id),
-  CONSTRAINT fk_formada_prova FOREIGN KEY (id_prova) ON DELETE CASCADE,
-  CONSTRAINT fk_formada_questao FOREIGN KEY (id_questao) ON DELETE CASCADE
+  CONSTRAINT fk_formada_prova 
+    FOREIGN KEY (id_prova)  
+    REFERENCES prova(id) 
+    ON DELETE CASCADE,
+  CONSTRAINT fk_formada_questao FOREIGN KEY (id_questao) REFERENCES questoes(id) ON DELETE CASCADE
 ) ENGINE=innoDB;
 
 

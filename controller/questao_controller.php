@@ -25,6 +25,12 @@ class QuestaoController {
         return $res;
     }
 
+    public function incrementarNumAcertos($id_questao, $num_acertos) {
+        $data = ["id" => $id_questao,];
+        $res = $this->questaoDao->incrementarNumAcertos($data);
+        return $res;
+    }
+
     public function buscarQuestao($id, $readble) { 
         $data = [ "id" => $id, "readble" => $readble];
         $res = $this->questaoDao->buscarQuestao($data);
@@ -35,5 +41,12 @@ class QuestaoController {
         $data = ["id_area" => $id_area, ];
         $res = $this->questaoDao->buscarQuestaoArea($data);
         return $res;
+    
+    }
+
+    public function buscarRespostaQuestao($id) {
+        $data = ["id" => $id,];
+        $ret = $this->questaoDao->buscarRespostaQuestao($data);
+        return $ret;
     }
 }

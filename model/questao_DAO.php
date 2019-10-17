@@ -138,12 +138,24 @@ class QuestaoDao {
         }
     }
 
-    public function alterarNumAcertos($data) {
-        $query = 'UPDATE questoes SET num_acertos=:num_acertos WHERE id=:id ORDER BY id';
+    public function incrementarNumAcertos($data) {
+        $query = 'UPDATE questoes SET num_acertos=num_acertos + 1 WHERE id=:id';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':id', $data['id']);
-            $stmt->bindParam(':num_acertos', $data['num_acertos']);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOException $e) {
+            return "Erro: ".$e->getMessage();
+        }
+    }
+
+    public function buscarRespostaQuestao($data) {
+        $query = 'SELECT resposta FROM questoes WHERE id=:id';
+        try {
+            $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+            $stmt->bindParam(':id', $data['id']);
             $stmt->execute();
             $result = $stmt->fetchAll();
             return $result;

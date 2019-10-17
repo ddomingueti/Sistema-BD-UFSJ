@@ -1,6 +1,5 @@
 <?php
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_controller.php";
-    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
     session_start();
     $msg = false;
     $status = false;

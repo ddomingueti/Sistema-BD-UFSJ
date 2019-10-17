@@ -14,7 +14,6 @@
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         var_dump($_POST);
         $questoes = $provaController->buscarQuestaoProva($_POST['id_prova']);
-        var_dump($questoes);
         $resposta = false;
         if ($_POST['resposta_a'] != null)
             $resposta = $_POST['resposta_a'];
@@ -24,12 +23,16 @@
         $ret = $provaController->alterarRespostaQuestao($_POST['id_prova'], $_POST['id_questao'], $resposta);
         
         $atual = $_POST['atual'];
+        if (($questoes[$atual]['tipo'] == "F") && ($questoes[$atual]['resposta_usuario'] == $questoes[$atual]['resposta'])) {
+            $questaoController->incrementarNumAcertos($questoes[$atual]['id']);
+        }
+        
         $atual = $atual + 1;
 
-        if ($atual > count($questoes)) {
+        if ($atual >= count($questoes) - 1) {
             header('Location: prova_finalizada.php?id_prova='.$_POST['id_prova']);
         } else {
-            header ('Location: prova_questao.php?id_prova='.$_POST['id_prova'].'&id_questao='.$questoes[$atual]['id_questao'].'&atual='.$atual);
+            header ('Location: prova_questao.php?id_prova='.$_POST['id_prova'].'&id_questao='.$questoes[$atual]['id'].'&atual='.$atual);
         }
 
     }

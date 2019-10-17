@@ -71,10 +71,12 @@ class ProvaController {
         $ret = $this->provaDao->buscarQuestaoProva($data);
         return $ret;
     }
-
-    public function buscarRespostaQuestao($id_prova, $id_questao) {
+    
+    // Relacao Formada_Por
+    
+    public function buscarRespostaUsuQuestao($id_prova, $id_questao) {
         $data = [ "id_prova" => $id_prova, "id_questao" => $id_questao,];
-        $ret = $this->provaDao->buscarRespostaQuestao($data);
+        $ret = $this->provaDao->buscarRespostaUsuQuestao($data);
         return $ret;
     }
 
@@ -85,10 +87,33 @@ class ProvaController {
     }
     public function calculaResultadoProva($id_prova) {
         $questoes = $this->buscarQuestaoProva($id_prova);
-        for ($questoes as $questao) {
-            $resposta = $this->buscarRespostaQuestao($questao['id']);
-            //if ($resposta[0]['resposta_usuario'] == )
+        $notaUsuario = 0;
+        $totalQuestoes = 1;
+        
+        $numQuestoes = array_fill(0, sizeof($questoes), 0);
+        $respostasUsuario = array_fill(0, sizeof($questoes), 0);
+        $gabarito = array_fill(0, sizeof($questoes), 0);
+
+        for ($i=0; $i<sizeof($questoes); $i++) {
+            $resposta = $questoes[$i]['resposta_usuario'];
+            if (($questoes[$i]['tipo'] == "F") && ($questoes[$i]['resposta'] == $questoes[$i]['resposta_usuario'])) {
+                $notaUsuario = $notaUsuario + 1;
+            }
+
+            $numQuestoes[$i] = $totalQuestoes;
+            $respostasUsuario[$i] = $questoes[$i]['resposta_usuario'];
+            $gabarito[$i] = $questoes[$i]['resposta'];
+            $totalQuestoes = $totalQuestoes + 1;
         }
+
+        $tabelaResultados = [
+            "num_questao" => $numQuestoes,
+            "resposta_usuario" => $respostasUsuario,
+            "gabarito" => $gabarito,
+            "nota" => $notaUsuario,
+        ];
+        
+        return $tabelaResultados;
     }
 }
 

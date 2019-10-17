@@ -101,7 +101,7 @@ class ProvaDao {
     }
 
     public function buscarQuestaoProva($data) {
-        $query = 'SELECT id_questao FROM formada_por WHERE id_prova=:id_prova ORDER BY id_questao';
+        $query = 'SELECT questoes.id, questoes.tipo, questoes.resposta, formada_por.resposta_usuario FROM (formada_por JOIN questoes ON id_questao = questoes.id) WHERE id_prova =:id_prova ORDER BY questoes.id';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':id_prova', $data['id_prova']);
@@ -113,7 +113,7 @@ class ProvaDao {
         }
     }
 
-    public function buscarRespostaQuestao($data) {
+    public function buscarRespostaUsuQuestao($data) {
         $query = 'SELECT resposta_usuario FROM formada_por WHERE (id_prova=:id_prova AND id_questao=:id_questao)';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
