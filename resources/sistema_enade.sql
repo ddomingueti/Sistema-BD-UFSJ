@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `avaliacao` (
   `id_usuario` varchar(11) NOT NULL,
   CONSTRAINT pk_usu PRIMARY KEY (`id`),
   CONSTRAINT fk_usu_prova 
-    FOREIGN KEY (id_usuario) REFERENCES usuario('cpf')
+    FOREIGN KEY (id_usuario) REFERENCES usuario(cpf)
     ON DELETE CASCADE
 ) ENGINE=innoDB;
 
