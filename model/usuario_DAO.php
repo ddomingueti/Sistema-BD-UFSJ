@@ -1,6 +1,6 @@
 <?php
 
-include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
+require_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
 
 class UsuarioDao {
 

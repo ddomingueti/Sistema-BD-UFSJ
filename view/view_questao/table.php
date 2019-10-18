@@ -1,11 +1,21 @@
 <?php
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
+    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_controller.php";
     session_start();
     if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
         header('location: ../../index.php');
     }
     
     $questaoController = new QuestaoController();
+    $usuarioController = new UsuarioController();
+    $usu = $usuarioController->buscarUsuario($_SESSION['cpf']);
+
+    $ret = null;
+    if ($_SESSION['tipo_usuario'] == 0) {
+        $ret = $questaoController->buscarQuestao(null, true);
+    } else {    
+        $ret = $questaoController->buscarQuestaoArea($usu[0]['id_area']);
+    }
 ?>
 
 
@@ -173,7 +183,6 @@
                 </tfoot>
                 <tbody>
                 <?php
-                    $ret = $questaoController->buscarQuestao(null, true);
                     for ($i=0; $i < count($ret); $i++) {
                         echo "<tr>";
                         echo "<td><center>".$ret[$i]['id']."</center></td>";

@@ -1,16 +1,18 @@
 <?php
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/prova_controller.php";
     
-    /*
     session_start();
     if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
         header('location: ../../index.php');
-    }*/
+    }
 
     $provaController = new ProvaController();
     $ret = null;
-    
-    $ret = $provaController->buscarProvaAluno('12345678910');
+    if ($_SESSION['tipo_usuario'] == 0) {
+        $ret = $provaController->buscarProva(null);
+    } else {
+        $ret = $provaController->buscarProvaAluno($_SESSION['cpf']);
+    }
 ?>
 
 
@@ -129,6 +131,7 @@
                 <thead>
                   <tr>
                     <th class="text-center">ID</th>
+                    <th class="text-center">Usuário (CPF)</th>
                     <th class="text-center">Data</th>
                     <th class="text-center">Finalizada</th>
                     <th class="text-center">Quantidade de questões</th>
@@ -139,6 +142,7 @@
                 <tfoot>
                     <tr>
                     <th class="text-center">ID</th>
+                    <th class="text-center">Usuário (CPF)</th>
                     <th class="text-center">Data</th>
                     <th class="text-center">Finalizada</th>
                     <th class="text-center">Quantidade de questões</th>
@@ -154,10 +158,14 @@
                         echo "<td><center>".$ret[$i]['id']."</center></td>";
                         echo "<td><center>".$ret[$i]['id_usuario']."</center></td>";
                         echo "<td><center>".$ret[$i]['data']."</center></td>";
-                        echo "<td><center>".$ret[$i]['finalizada']."</center></td>";
+                        if ($ret[$i]['finalizada'] == 1)
+                            echo "<td><center>Sim</center></td>";
+                        else
+                            echo "<td><center>Não</center></td>";
+                        
                         echo "<td><center>".$ret[$i]['num_questoes']."</center></td>";
                         echo "<td><center>".$ret[$i]['num_acertos']."</center></td>";
-                        echo '<td><center><button action="window.open("https://www.w3schools.com")>Visualizar</button>'; 
+                        echo "<td><center><a href='prova_finalizada.php?id_prova=".$ret[$i]['id']."&finalizada=null&editable=false' target='_blank'>Visualizar</a></center></td>";
                         echo "</tr>";
                     }
                 ?>
@@ -169,15 +177,6 @@
         </div>
       </div>
       <!-- /.container-fluid -->
-
-      <!-- Sticky Footer -->
-      <footer class="sticky-footer">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright © Your Website 2019</span>
-          </div>
-        </div>
-      </footer>
 
     </div>
     <!-- /.content-wrapper -->

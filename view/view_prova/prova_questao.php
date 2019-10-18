@@ -26,29 +26,27 @@
         $ret = $provaController->alterarRespostaQuestao($_POST['id_prova'], $_POST['id_questao'], $resposta);
         
         $atual = $_POST['atual'];
+        $editable = $_POST['editable'];
         if (($questoes[$atual]['tipo'] == "F") && ($questoes[$atual]['resposta_usuario'] == $questoes[$atual]['resposta'])) {
             $questaoController->incrementarNumAcertos($questoes[$atual]['id']);
         }
         
         $atual = $atual + 1;
 
-        if ($atual >= count($questoes) - 1) {
-            header('Location: prova_finalizada.php?id_prova='.$_POST['id_prova']);
+        if ($atual >= count($questoes)) {
+            header('Location: prova_finalizada.php?id_prova='.$_POST['id_prova']."&finalizada=true&editable=true");
         } else {
-            header ('Location: prova_questao.php?id_prova='.$_POST['id_prova'].'&id_questao='.$questoes[$atual]['id'].'&atual='.$atual);
+            header ('Location: prova_questao.php?id_prova='.$_POST['id_prova'].'&id_questao='.$questoes[$atual]['id'].'&atual='.$atual.'&editable='.$editable);
         }
 
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
-        var_dump($_GET);
         $questao_id = $_GET['id_questao'];
         $questao = $questaoController->buscarQuestao($questao_id, false);
         $atual = $_GET['atual'];
-        $editable = $_GET['editable'];
-
+        $editable = ($_GET['editable'] === 'true');
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +71,11 @@
 </head>
 
 <body class="bg-dark">
-
+  
+  <div class="container mx-auto mt-5 col-md-2">
+    <a class="btn btn-primary btn-block" type="submit" href="prova_finalizada.php?id_prova=<?php echo $_GET['id_prova']?>&finalizada=false">Abandonar Prova</a>  
+  </div>
+  
   <div class="container">
     <div class="card card-register mx-auto mt-5">
       <div class="card-header">Questão <?php echo $atual + 1;?></div>
@@ -105,64 +107,72 @@
                         <div class="input-group-prepend col-md-2">
                             <label for="resposta">Resposta</label>
                         </div>
-                            <textarea class="form-control" id="resposta" aria-label="Resposta" name="resposta_a"></textarea>
+        <textarea class="form-control" id="resposta" aria-label="Resposta" name="resposta_a" <?php if(!$editable) {?> disabled <?php }?>></textarea>
                     </div>
                 </div>
             </div>
             
             <div style="<?php if ($questao[0]['tipo'] == 'A'){?> display:none;" <?php } ?>>
+                    <div class="container">
 
                     <div class="form-check">
-        <input class="form-check-input" type="radio" name="resposta_f" id="altA" value="A" <?php if($editable) {?> disabled <?php }?>>
+                    <input class="form-check-input" type="radio" name="resposta_f" id="altA" value="A" <?php if(!$editable) {?> disabled <?php }?>>
                         <label class="form-check-label" for="altA">
                             <?php echo $questao[0]['a']; ?>
                         </label>
                     </div>
                 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="resposta_f" id="altB" value="B">
+                        <input class="form-check-input" type="radio" name="resposta_f" id="altB" value="B" <?php if(!$editable) {?> disabled <?php }?>>
                         <label class="form-check-label" for="altB">
                         <?php echo $questao[0]['b']?>
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="resposta_f" id="altc" value="C">
+                        <input class="form-check-input" type="radio" name="resposta_f" id="altc" value="C" <?php if(!$editable) {?> disabled <?php }?>>
                         <label class="form-check-label" for="altc">
                         <?php echo $questao[0]['c']?>
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="resposta_f" id="altD" value="D">
+                        <input class="form-check-input" type="radio" name="resposta_f" id="altD" value="D" <?php if(!$editable) {?> disabled <?php }?>>
                         <label class="form-check-label" for="altD">
                         <?php echo $questao[0]['d']?>
                         </label>
                     </div>
                 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="resposta_f" id="altE" value="E">
+                        <input class="form-check-input" type="radio" name="resposta_f" id="altE" value="E" <?php if(!$editable) {?> disabled <?php }?>>
                         <label class="form-check-label" for="altE">
                         <?php echo $questao[0]['e']?>
                         </label>
                     </div>
+
+                    </div>
                 
             </div>
             
-            <input type="hidden" id="id_prova" name="id_prova" value="<?php echo $_GET['id_prova'];?>">
-            <input type="hidden" id="id_questao" name="id_questao" value="<?php echo $_GET['id_questao'];?>">
-            <input type="hidden" id="atual" name="atual" value="<?php echo $_GET['atual']?>">
-
             <div class="form-group row">
-              <button class="btn btn-primary btn-block" type="submit" name="proxima">Próxima questão</button>
+                <input type="hidden" id="id_prova" name="id_prova" value="<?php echo $_GET['id_prova'];?>">
+                <input type="hidden" id="id_questao" name="id_questao" value="<?php echo $_GET['id_questao'];?>">
+                <input type="hidden" id="atual" name="atual" value="<?php echo $_GET['atual']?>">
+                <input type="hidden" id="editable" name="editable" value="<?php echo $_GET['editable']?>">
+            
+            <div class="container text-center col-md-6">
+              <?php if ($editable) { ?>
+              <button class="btn btn-primary btn-block" type="submit" name="proxima">Próxima questão</button>  
+              <?php } else {?>
+              <a class="btn btn-primary btn-block" href="javascript:window.close();" name="proxima">Fechar</a>  
+              <?php } ?>
+            </div>
             </div>
             
         </form>
-        
-        </div>
     </div>
 
-    
+    </div>
   </div>
 
   <!-- Bootstrap core JavaScript-->

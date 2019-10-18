@@ -10,9 +10,16 @@
     $questaoController = new QuestaoController();
     $areaController = new AreaController();
     $area_nomes = null;
+
     if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $ret = $questaoController->adicionarQuestao($_POST);
-        header ('Location: table.php');
+        if ($_POST['tipo'] == "F" && strlen($_POST['resposta']) > 1) {
+            echo "<script>window.alert('A resposta deve possuir um único caractere!')</script>";
+            header ('Location: register.php');
+        } else {
+            $_POST['resposta'] = strtoupper($_POST['resposta']);
+            $ret = $questaoController->adicionarQuestao($_POST);
+            header ('Location: table.php');
+        }
     } else {
         $area_nomes = $areaController->buscarArea(null, null);
     }

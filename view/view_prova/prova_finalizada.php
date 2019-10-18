@@ -9,12 +9,15 @@
     
     $provaController = new ProvaController();
     $questaoController = new QuestaoController();
-
+    $finalizaada = null;
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
-        var_dump($_GET);
-        $ret = $provaController->calculaResultadoProva($_GET['id_prova']);
+        if (isset($_GET['finalizada']))
+            $finalizada = ($_GET['finalizada'] === 'true');
+        else
+            $finalizada = null;
+        $editable = ($_GET['finalizada'] === 'true');
+        $ret = $provaController->calculaResultadoProva($_GET['id_prova'], $finalizada, $editable);
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +49,7 @@
     <div class="card card-register mx-auto mt-5">
       <div class="card-header">Resultados da prova</div>
       <div class="card-body">
+      <span class="label">Atenção! Apenas questões fechadas são validadas pelo sistema!</span>
         <div class="card-text" style="padding-bottom:10px;">
             <div class="table-responsive">
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -54,15 +58,17 @@
                     <th class="text-center">Questão</th>
                     <th class="text-center">Resposta dada</th>
                     <th class="text-center">Gabarito</th>
+                    <th class="text-center">Visuaizar Questao </th>
                   </tr>
                 </thead>
                 <tbody>
                 <?php
                     for ($i=0; $i < sizeof($ret['num_questao']); $i++) {
                         echo "<tr>";
-                        echo "<td><center>".$ret['num_questao'][$i]."</center></td>\n";
-                        echo "<td><center>".$ret['resposta_usuario'][$i]."</center></td>\n";
-                        echo "<td><center>".$ret['gabarito'][$i]."</center></td>\n";
+                        echo "<td><center>".$ret['num_questao'][$i]."</center></td>";
+                        echo "<td><center>".$ret['resposta_usuario'][$i]."</center></td>";
+                        echo "<td><center>".$ret['gabarito'][$i]."</center></td>";
+                        echo "<td><center><a href='prova_questao.php?id_prova=".$_GET['id_prova']."&id_questao=".$ret['id_questao'][$i]."&editable=false&atual=0' target='_blank'>Visualizar</a></center></td>";
                         echo "</tr>";
                     }
                 ?>
@@ -81,11 +87,14 @@
               </table>
             </div>
 
-            <a class="btn btn-primary btn-block" href="table.php">Voltar</a>
-
+            <?php 
+                if (!$editable) {
+                    echo '<a class="btn btn-primary btn-block" href="javascript:window.close();">Voltar</a>';
+                } else {
+                    echo '<a class="btn btn-primary btn-block" href="table.php;">Voltar</a>';
+                }
+            ?>
         </div>
-        
-        
         </div>
     </div>
 
@@ -93,8 +102,8 @@
   </div>
 
   <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../vendor/jquery/jquery.min.js"></script>
+  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

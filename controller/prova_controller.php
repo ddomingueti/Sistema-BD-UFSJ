@@ -21,8 +21,8 @@ class ProvaController {
         $num_acertos = 0;
         if (count($questoesArea) < $num_questoes) {
             $num_questoes = count($questoesArea);
-            for ($i=0; i<count($questoesArea); $i++) {
-                $array_push($questoes, $questoesArea[$i]['id']);
+            for ($i=0; $i<count($questoesArea); $i++) {
+                array_push($questoes, $questoesArea[$i]['id']);
             }
         } else {
             for ($i = 0; $i < $num_questoes; $i++) {
@@ -86,11 +86,10 @@ class ProvaController {
         return $ret;
     }
 
-    public function calculaResultadoProva($id_prova) {
+    public function calculaResultadoProva($id_prova, $finalizada, $editable) {
         $questoes = $this->buscarQuestaoProva($id_prova);
         $notaUsuario = 0;
         $totalQuestoes = 1;
-        
         $numQuestoes = array_fill(0, sizeof($questoes), 0);
         $idQuestoes = array_fill(0, sizeof($questoes), 0);
         $respostasUsuario = array_fill(0, sizeof($questoes), 0);
@@ -108,6 +107,13 @@ class ProvaController {
             $gabarito[$i] = $questoes[$i]['resposta'];
             $totalQuestoes = $totalQuestoes + 1;
         }
+        
+        $data = ["id" => $id_prova,
+            "finalizada" => $finalizada,
+            "num_acertos" => $notaUsuario, ];
+        var_dump($editable);
+        if ($editable == true)
+            $this->provaDao->alterarProva($data);
 
         $tabelaResultados = [
             "num_questao" => $numQuestoes,

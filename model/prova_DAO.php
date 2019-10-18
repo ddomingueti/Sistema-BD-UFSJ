@@ -42,14 +42,16 @@ class ProvaDao {
      }
 
     public function alterarProva($data) { 
-        $query = 'UPDATE prova SET data=:data, finalizada=:finalizada, num_acertos=:num_acertos WHERE id_prova=:id_prova';
+        $query = 'UPDATE prova SET finalizada=:finalizada, num_acertos=:num_acertos WHERE id=:id_prova';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':data', $data['data']);
-            $stmt->bindParam(':finalizada', $data['finalizada']);
+            $stmt->bindParam(':finalizada', $data['finalizada'], PDO::PARAM_BOOL);
             $stmt->bindParam(':num_acertos', $data['num_acertos']);
             $stmt->bindParam(':id_prova', $data['id']);
             $r = $stmt->execute();
+            if (!$r) {
+                print_r($stmt->errorInfo());
+            }
             $result = $stmt->fetchAll();
             return $result;
         } catch (PDOEXception $e) {
