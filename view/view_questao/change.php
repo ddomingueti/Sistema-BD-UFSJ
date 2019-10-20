@@ -165,6 +165,7 @@
             
             <div class="form-row">
               <button class="btn btn-primary btn-block" type="submit" name="cadastrar">Alterar</button>
+              <button class="btn btn-primary btn-block" href="table.php">Voltar</button>
             </div>
         </form>
       </div>

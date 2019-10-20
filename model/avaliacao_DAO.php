@@ -1,6 +1,5 @@
 <?php
 require_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
-include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/usuario_dao.php";
 
 class AvaliacaoDao {
 
@@ -10,7 +9,7 @@ class AvaliacaoDao {
         
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':comentario', $data['comentario'])
+            $stmt->bindParam(':comentario', $data['comentario']);
             $stmt->bindParam(':nota', $data['nota']);
             $stmt->bindParam(':data', $data['data']);
             $stmt->bindParam(':id_usuario', $data['id_usuario']);
@@ -37,13 +36,33 @@ class AvaliacaoDao {
     }   
 
     public function alterarAvaliacao($data) { 
-        $query = 'UPDATE avaliacao SET comentario=:comentario, nota=:nota, data=:data) WHERE id=:id';
+        $query = 'UPDATE avaliacao SET comentario=:comentario, nota=:nota, data=:data WHERE id=:id';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':id', $data['id_usuario']);
+            $stmt->bindParam(':id', $data['id']);
             $stmt->bindParam(':comentario', $data['comentario']);
             $stmt->bindParam(':nota', $data['nota']);
             $stmt->bindParam(':data', $data['data']);
+            $r = $stmt->execute();
+            if (!$r) {
+                print_r($stmt->errorInfo());
+            }
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOEXception $e) {
+            return "Erro: ".$e->getMessage();
+        }
+    }
+
+    public function buscarAvaliacaoUnica($data) {
+        $query = 'SELECT id, comentario, nota, data 
+            FROM avaliacao
+            WHERE id=:id
+            ORDER BY id';
+        try {
+            $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+            $stmt->bindParam(':id', $data['id']);
+            
             $r = $stmt->execute();
             $result = $stmt->fetchAll();
             return $result;
@@ -52,18 +71,30 @@ class AvaliacaoDao {
         }
     }
 
-    public function buscarAvaliacao($data) { 
-        $query = null;
-        if ($data['id'] == null)
-            $query = 'SELECT * FROM avaliacao WHERE 1 ORDER BY id';
-        else
-            $query = 'SELECT * FROM avaliacao WHERE id=:id';
-        
+    public function buscarAvaliacaoUsuarioUnico($data) {
+        $query = 'SELECT id, comentario, nota, data, nome 
+            FROM avaliacao
+            WHERE id_usuario=:cpf
+            ORDER BY id';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            if ($data['id'] != null)
-                $stmt->bindParam(':id', $data['id']);
+            $stmt->bindParam(':cpf', $data['cpf']);
             
+            $r = $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOEXception $e) {
+            return "Erro: ".$e->getMessage();
+        }
+    }
+    
+    public function buscarAvaliacaoUsuarios() { 
+        $query = 'SELECT id, comentario, nota, data, nome 
+            FROM (avaliacao JOIN usuario ON id_usuario=cpf)
+            WHERE 1 
+            ORDER BY id';
+        try {
+            $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $r = $stmt->execute();
             $result = $stmt->fetchAll();
             return $result;
@@ -95,6 +126,6 @@ class AvaliacaoDao {
             return $result;
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();
-        }   
+        }  
     }
 }

@@ -54,6 +54,21 @@ class UsuarioController {
         return $ret;
     }
 
+    public function buscarUsuarioTipo($tipo_usuario) {
+        if ($tipo_usuario == "administrador") {
+            $tipo_usuario = 0;
+        } else if ($tipo_usuario == "aluno") {
+            $tipo_usuario = 1;
+        } else if ($tipo_usuario == "professor") {
+            $tipo_usuario = 2;
+        } else if ($tipo_usuario == "proreitor") {
+            $tipo_usuario = 3;
+        }
+        $data = [ "tipo_usuario" => $tipo_usuario, ];
+        $res = $this->usuarioDao->buscarUsuarioTipo($data);
+        return $res;
+    }
+
     public function realizarLogin($cpf, $senha) {
         $ret = $this->buscarUsuario($cpf);
         $data = ['success' => false, 'area' => null, 'msg' => ""];

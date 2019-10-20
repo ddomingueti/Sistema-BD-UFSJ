@@ -2,10 +2,10 @@
 include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/avaliacao_DAO.php";
 
 class AvaliacaoController {
-    private $avaliacaoDao = null;
+    private $avaliacaoDao;
 
     public function __construct() { 
-        $avaliacaoDao = new AvaliacaoDao();
+        $this->avaliacaoDao = new AvaliacaoDao();
     }
 
     public function adicionarAvaliacao($comentario, $nota, $data, $id_usuario) { 
@@ -19,24 +19,38 @@ class AvaliacaoController {
         return $ret;
     }
 
-    public function removerAvaliacao($id) { }
+    public function removerAvaliacao($id) {
+        $data = [ "id" => $id, ];
+        $ret = $this->avaliacaoDao->removerAvaliacao($data);
+        return $ret;
+     }
 
     public function alterarAvaliacao($id, $comentario, $nota, $data) { 
         $data = [
             "comentario" => $comentario,
             "nota" => $nota,
             "data" => $data,
+            "id" => $id,
         ];
+        var_dump($data);
         $ret = $this->avaliacaoDao->alterarAvaliacao($data);
         return $ret;
     }
 
-    public function buscarAvaliacao($id, $id_avaliacao) { 
-        $data = [
-            "id" => $id
-            "id_usuario" => $id_avaliacao,
-        ];
-        $ret = $this->avaliacaoDao->buscarAvaliacao($data);
+    public function buscarAvaliacao($id_avaliacao, $id_usuario) { 
+        $data = null;
+        $ret = null;
+
+        if ($id_avaliacao == null && $id_usuario != null) {
+            $data = ["cpf" => $id_usuario, ];
+            $ret = $this->avaliacaoDao->buscarAvaliacaoUsuarioUnico($data);
+        } else if ($id_avaliacao != null && $id_usuario == null) {
+            $data = ["id" => $id_avaliacao, ];
+            $ret = $this->avaliacaoDao->buscarAvaliacaoUnica($data);
+        } else {
+            $ret = $this->avaliacaoDao->buscarAvaliacaoUsuarios();
+        }
+
         return $ret;
     }
 

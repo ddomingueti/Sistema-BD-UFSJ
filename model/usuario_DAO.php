@@ -100,4 +100,18 @@ class UsuarioDao {
             return "Erro: ".$e->getMessage();
         }
     }
+
+    public function buscarUsuarioTipo($data) {
+        $query = 'SELECT * FROM usuario WHERE tipo_usuario=:tipo_usuario';
+
+        try {
+            $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+            $stmt->bindParam(':tipo_usuario', $data['tipo_usuario']);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOEXception $e) {
+            return "Erro: ".$e->getMessage();
+        }
+    }
 }

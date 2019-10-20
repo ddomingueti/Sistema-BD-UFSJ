@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin - Register</title>
+  <title>TreinaEnade</title>
 
   <!-- Custom fonts for this template-->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -60,7 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="text" class="form-control" id="inputArea" name="nome" value="<?php echo $nome?>">
                 </div>
             </div>
-            <button class="btn btn-primary btn-block" type="submit" name="alterar">Alterar</button>
+            <div class="form-row">
+                <button class="btn btn-primary btn-block" type="submit" name="alterar">Alterar</button>
+                <button class="btn btn-primary btn-block" href="table.php">Voltar</button>
+            </div>
         </div>
         </form>
       </div>

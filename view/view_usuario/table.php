@@ -205,7 +205,7 @@
         <div class="modal-body">Selecione "Sair" abaixo se está pronto para sair do sistema.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-          <a class="btn btn-primary" href="logout.php">Sair</a>
+          <a class="btn btn-primary" href="<?php echo '//'.$gerenciadorView->getRaiz().'/view/logout.php';?>">Sair</a>
         </div>
       </div>
     </div>

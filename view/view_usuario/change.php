@@ -56,7 +56,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin - Register</title>
+  <title>TreinaEnade</title>
 
   <!-- Custom fonts for this template-->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -187,6 +187,7 @@
 
             <div class="form-row" style="padding-bottom:10px;">
                 <button class="btn btn-primary btn-block" type="submit" name="alterar">Alterar Cadastro</button>
+                <button class="btn btn-primary btn-block" href="table.php">Voltar</button>
             </div>
         </div>
         </form>
