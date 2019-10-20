@@ -86,7 +86,7 @@ class ProvaController {
         return $ret;
     }
 
-    public function calculaResultadoProva($id_prova, $finalizada, $editable) {
+    public function calculaResultadoProva($id_prova, $finalizada, $tempo, $editable) {
         $questoes = $this->buscarQuestaoProva($id_prova);
         $notaUsuario = 0;
         $totalQuestoes = 1;
@@ -107,13 +107,17 @@ class ProvaController {
             $gabarito[$i] = $questoes[$i]['resposta'];
             $totalQuestoes = $totalQuestoes + 1;
         }
+
         
-        $data = ["id" => $id_prova,
+        if ($editable == true) {
+            $data = ["id" => $id_prova,
             "finalizada" => $finalizada,
-            "num_acertos" => $notaUsuario, ];
-        var_dump($editable);
-        if ($editable == true)
+            "num_acertos" => $notaUsuario, 
+            "tempo" => $tempo, ];
+        
             $this->provaDao->alterarProva($data);
+        }
+
 
         $tabelaResultados = [
             "num_questao" => $numQuestoes,

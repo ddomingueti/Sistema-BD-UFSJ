@@ -10,13 +10,21 @@
     $provaController = new ProvaController();
     $questaoController = new QuestaoController();
     $finalizaada = null;
+    $tempoFinal = null;
+    $tempoTotal = null;
+
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
-        if (isset($_GET['finalizada']))
+        if (isset($_GET['finalizada'])) {
+            $tempoFinal = time();
             $finalizada = ($_GET['finalizada'] === 'true');
-        else
+            $inicial = $_SESSION['start_time'];
+            var_dump($_SESSION['start_time']);
+            $tempoTotal = $tempoFinal - $inicial;
+        } else {
             $finalizada = null;
+        }
         $editable = ($_GET['finalizada'] === 'true');
-        $ret = $provaController->calculaResultadoProva($_GET['id_prova'], $finalizada, $editable);
+        $ret = $provaController->calculaResultadoProva($_GET['id_prova'], $finalizada, $tempoTotal, $editable);
     }
 ?>
 
@@ -83,6 +91,9 @@
                             <td>Nota final</td>
                             <td><?php echo $ret['nota'];?></td>
                         </tr>
+                        <tr>
+                            <td>Tempo Decorrido</td>
+                            <td><?php echo $tempoTotal;?></td>
                     </tbody>
               </table>
             </div>
@@ -91,7 +102,7 @@
                 if (!$editable) {
                     echo '<a class="btn btn-primary btn-block" href="javascript:window.close();">Voltar</a>';
                 } else {
-                    echo '<a class="btn btn-primary btn-block" href="table.php;">Voltar</a>';
+                    echo '<a class="btn btn-primary btn-block" href="table.php">Voltar</a>';
                 }
             ?>
         </div>

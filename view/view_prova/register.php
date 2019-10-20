@@ -11,6 +11,7 @@
     $provaController = new ProvaController();
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
+        $_SESSION['start_time'] = time();
         $res = $provaController->adicionarProva($_SESSION['cpf'], $_POST['quantidade'], $_POST['area']);
         header ('Location: prova_questao.php?id_prova='.$res['id_prova'].'&id_questao='.$res['id_questao'][0].'&atual=0&editable=true');
     }

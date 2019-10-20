@@ -60,16 +60,8 @@ class UsuarioController {
         if (count($ret) == 1) {
             $return_area = null;
             if ($senha == $ret[0]['senha']) {
-                if ($ret[0]['tipo_usuario'] == 0)
-                    $return_area = "view/adm.php";
-                else if ($ret[0]['tipo_usuario'] == 1)
-                    $return_area = "view/aluno.php";
-                else if ($ret[0]['tipo_usuario'] == 2)
-                    $return_area = "view/professor.php";
-                else if ($ret[0]['tipo_usuario'] == 3)
-                    $return_area = "view/pro-reitor.php";
                 $data['success'] = true;
-                $data['area'] = $return_area;
+                $data['area'] = 'view/index.php';
                 $data['msg'] = "Bem vindo!";
                 $data['tipo_usuario'] = $ret[0]['tipo_usuario'];
             } else {
