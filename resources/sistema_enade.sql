@@ -13,8 +13,6 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 
-IF NOT EXISTS CREATE SCHEMA 'sistema_enade';
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -59,7 +57,6 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   CONSTRAINT pk_usuario PRIMARY KEY (`cpf`),
   CONSTRAINT fk_usu_area FOREIGN KEY (id_area) REFERENCES area(id) ON DELETE SET NULL
 ) ENGINE=innoDB;
-
 -- --------------------------------------------------------
 
 --
@@ -91,6 +88,8 @@ CREATE TABLE IF NOT EXISTS `prova` (
   `data` date NOT NULL,
   `finalizada` tinyint(1) NOT NULL,
   `num_acertos` int(11) NOT NULL,
+  `nota` varchar(11) NOT NULL,
+  `tempo` varchar(11) NOT NULL,
   `id_usuario` varchar(11) NOT NULL,
   CONSTRAINT pk_prova PRIMARY KEY (`id`),
   CONSTRAINT fk_prova_usu 
@@ -144,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `formada_por` (
   CONSTRAINT fk_formada_questao FOREIGN KEY (id_questao) REFERENCES questoes(id) ON DELETE CASCADE
 ) ENGINE=innoDB;
 
-
+INSERT INTO usuario VALUES ("Administrador", "admin@gmail.com", "00000000000", 1, "00000000", "M", "2019-10-21", null, null, 0);
 
 COMMIT;
 

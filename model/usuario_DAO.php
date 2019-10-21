@@ -75,10 +75,10 @@ class UsuarioDao {
         }
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+            
             if ($data['cpf'] != null) {
                 $stmt->bindParam(':cpf', $data['cpf']);
             }
-            
             $stmt->execute();
             $result = $stmt->fetchAll();
 

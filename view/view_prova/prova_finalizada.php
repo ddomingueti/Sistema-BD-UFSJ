@@ -18,8 +18,11 @@
             $tempoFinal = time();
             $finalizada = ($_GET['finalizada'] === 'true');
             $inicial = $_SESSION['start_time'];
-            var_dump($_SESSION['start_time']);
-            $tempoTotal = $tempoFinal - $inicial;
+            $editable = $_GET['editable'] === 'true';
+            $tempoTotal = 0;
+            if ($editable) {
+                $tempoTotal = $tempoFinal - $inicial;
+            }
         } else {
             $finalizada = null;
         }

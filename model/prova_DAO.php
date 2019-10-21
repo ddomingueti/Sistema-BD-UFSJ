@@ -20,7 +20,7 @@ class ProvaDao {
                 $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
                 $stmt->bindParam(':id_prova', $id_prova);
                 $stmt->bindParam(':id_questao', $data['questoes'][$i]);
-                $stmt->execute();
+                $r2 = $stmt->execute();
             }
             return [ "success" => true, "id_prova" => $id_prova, "id_questao" => $data['questoes']];
         } catch (PDOEXception $e) {
@@ -42,11 +42,13 @@ class ProvaDao {
      }
 
     public function alterarProva($data) { 
-        $query = 'UPDATE prova SET finalizada=:finalizada, num_acertos=:num_acertos WHERE id=:id_prova';
+        $query = 'UPDATE prova SET finalizada=:finalizada, num_acertos=:num_acertos, nota=:nota, tempo=:tempo WHERE id=:id_prova';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':finalizada', $data['finalizada'], PDO::PARAM_BOOL);
             $stmt->bindParam(':num_acertos', $data['num_acertos']);
+            $stmt->bindParam(':nota', $data['nota']);
+            $stmt->bindParam(':tempo', $data['tempo']);
             $stmt->bindParam(':id_prova', $data['id']);
             $r = $stmt->execute();
             if (!$r) {
@@ -96,6 +98,16 @@ class ProvaDao {
             $stmt->bindParam(':id_usuario', $data['id_usuario']);
             $stmt->execute();
             $result = $stmt->fetchAll();
+            for ($i = 0; $i < count($result); $i++) {
+                $query = 'SELECT COUNT(formada_por.id_questao) FROM formada_por
+                WHERE formada_por.id_prova = '.$result[$i]['id'];
+                $stmt = $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+                $stmt->bindParam(':id', $data['id']);    
+                $stmt->execute();
+                $num_questoes = $stmt->fetchAll();
+                $formated = [ 'num_questoes' => $num_questoes[0][0]];
+                $result[$i] += $formated;
+            }
             return $result;
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();

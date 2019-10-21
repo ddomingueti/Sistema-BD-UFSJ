@@ -1,23 +1,56 @@
+<script>
+
+  Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+  Chart.defaults.global.defaultFontColor = '#292b2c';
+
+  $(document).ready(function (){
+    $("#salvar").click(function (){
+      var form = new FormData($("#formulario")[0]);
+      $.ajax({
+        url: 'recebeDados.php',
+        type: 'post',
+        dataType: 'json',
+        cache: false,
+        processData: false,
+        contentType: false,
+        data: form,
+        timeout: 8000,
+        success: function(resultado){
+          $("#resposta").html(resultado);
+        }
+      });
+    });
+  });
+
+</script>
+
 <?php
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_controller.php";
+    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_proreitor_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
 
+    $proreitorController = new ProReitorController();
     $areaController = new AreaController();
     $nome_areas = $areaController->buscarArea(null, null);
     $msg = false;
+    $grupo1 = null;
+    $grupo2 = null;
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
     	if(isset($_POST['area']) && isset($_POST['grupo'])){
-	    	echo $_POST['area'];
-	        echo $_POST['grupo'];
+	    	$area =  $_POST['area'];
+        $grupo1 = $_POST['grupo'];
+        echo $area;
+        echo $grupo1;
 	    }
     }   
 
-    if($_SERVER["REQUEST_METHOD"] == "GET") {
+   /* if($_SERVER["REQUEST_METHOD"] == "GET") {
     	if(isset($_GET['grupo'])) {
-	   		echo $_GET['grupo'];
+	   		$grupo2 = $_GET['grupo'];
+        echo $grupo2;
 	   	}
-    }
+    } */
    	
 ?>
 
@@ -27,6 +60,8 @@
 <head>
 
   <meta charset="utf-8">
+  <script src="js/jquery-3.1.1.min.js" type="text/javascript"></script>
+  <script src="js/charts.js" type="text/javascript"></script>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -146,6 +181,7 @@
       </li>
     </ul>
 
+    <!-- Conteúdo -->
     <div id="content-wrapper">
 
       <div class="container-fluid">
@@ -158,7 +194,7 @@
           <li class="breadcrumb-item active">Charts</li>
         </ol>
 
-        <!-- Navebar -->
+        <!-- Barra de Navegação (Grupos) -->
         <nav>
           <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Estatísticas por Ano</a>
@@ -166,40 +202,49 @@
             <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Tabelas</a>
           </div>
         </nav>
+
+        <!-- abas -->
         <div class="tab-content" id="nav-tabContent">
+
+          <!-- 1ª aba: Gráfico de Linha -->
           <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-          	<form action = "" method="POST">
-	            <div class="form-inline " method="POST" style="padding-top:1%;padding-bottom:1%;justify-content: center"> 
-	                <label for="inputArea" class="col-sm-1 col-form-label">Área</label>
-	                <div class="input-group sm-2" style="width: auto;">
-	                    <select class="custom-select" id="inputArea" name="area">
-	                        <option value="N" selected>Nenhuma</option>
-	                        <?php 
-	                            foreach ($nome_areas as $item) {
-	                                echo '<option value="'.$item['id'].'">'.$item['nome'].'</option>';                   
-	                            }
-	                        ?>
-	                    </select>
-	                </div>
 
-	                <label for="inputGrupo" class="col-sm-1 col-form-label">Grupo</label>
-	                <div class="input-group sm-2" style="width: auto;">
-	                <select class="custom-select" id="inputGrupo" name="grupo">
-	                    <option value="0">Todos os alunos</option>
-	                    <option value="1">Cota</option> <!-- Uma linha pra cada cota -->
-	                    <option value="2">Sexo</option> <!-- Tem q ter 2 linhas no msm grafico-->
+          	<form id = "formulario" >
+	            <div class="form-inline "style="padding-top:1%;padding-bottom:1%;justify-content: center"> 
+
+                <!-- Dropdown Áreas -->
+	              <label for="inputArea" class="col-sm-1 col-form-label">Área</label>
+	              <div class="input-group sm-2" style="width: auto;">
+	                <select class="custom-select" id="inputArea" name="area">
+	                  <option value="N" selected>Nenhuma</option>
+	                  <?php 
+	                    foreach ($nome_areas as $item) {
+	                    echo '<option value="'.$item['id'].'">'.$item['nome'].'</option>';                   
+	                  }
+	                  ?>
 	                </select>
-	                </div>
+	              </div>
 
+                <!-- Dropdown Grupos -->
+	              <label for="inputGrupo" class="col-sm-1 col-form-label">Grupo</label>
+	              <div class="input-group sm-2" style="width: auto;">
+	                <select class="custom-select" id="inputGrupo" name="grupo">
+	                  <option value="0">Todos os alunos</option>
+	                  <option value="1">Cota</option> <!-- Uma linha pra cada cota -->
+	                  <option value="2">Sexo</option> <!-- Tem q ter 2 linhas no msm grafico-->
+	                </select>
+	              </div>
+
+                <!-- Botão -->
 	              <div class="form-row">
-	                <button class="btn btn-primary btn-block" type="submit" name="gerar">Gerar Gráfico</button>
+	                <button class="btn btn-primary btn-block" type="button" id = "gerar" name="gerar">Gerar Gráfico</button>
 	              </div>
 
 	            </div>
-        	</form>
+        	 </form>
 
             <!-- Area Chart Example-->
-            <div class="card mb-3">
+            <div class="card mb-3" id = "resposta">
               <div class="card-header">
                 <i class="fas fa-chart-area"></i>
                 Area Chart Example</div>
@@ -210,41 +255,47 @@
             </div>
           </div>
 
+          <!-- 2ª aba: Gráfico de Barras e Pizza -->
           <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            
             <!-- Menu -->    
             <form action = "" method="POST">       
-	             <div class="form-inline " style="padding-top:1%;padding-bottom:1%;justify-content: center"> 
-	                <label for="inputArea" class="col-sm-1 col-form-label">Área</label>
-	                <div class="input-group sm-2" style="width: auto;">
-	                    <select class="custom-select" id="inputArea" name="area">
-	                        <option value="N" selected>Nenhuma</option>
-	                        <?php 
-	                            foreach ($nome_areas as $item) {
-	                                echo '<option value="'.$item['id'].'">'.$item['nome'].'</option>';                   
-	                            }
-	                        ?>
-	                    </select>
-	                </div>
+	            <div class="form-inline " style="padding-top:1%;padding-bottom:1%;justify-content: center"> 
+                
+                <!-- Dropdown áreas -->
+                <label for="inputArea" class="col-sm-1 col-form-label">Área</label>
+                <div class="input-group sm-2" style="width: auto;">
+                  <select class="custom-select" id="inputArea" name="area">
+                    <option value="N" selected>Nenhuma</option>
+                    <?php 
+                      foreach ($nome_areas as $item) {
+                      echo '<option value="'.$item['id'].'">'.$item['nome'].'</option>';                   
+                    }
+                    ?>
+                  </select>
+                </div>
 
-	                <label for="inputGrupo" class="col-sm-1 col-form-label">Grupo</label>
-	                <div class="input-group sm-2" style="width: auto;">
-	                <select class="custom-select" id="inputGrupo" name="grupo">
-	                    <option value="0">Todos os alunos</option>
-	                    <option value="1">Cota</option> <!-- Uma linha pra cada cota -->
-	                    <option value="2">Sexo</option> <!-- Tem q ter 2 linhas no msm grafico-->
-	                </select>
-	                </div>
+                <!-- Dropdown Grupos -->
+                <label for="inputGrupo" class="col-sm-1 col-form-label">Grupo</label>
+                <div class="input-group sm-2" style="width: auto;">
+                  <select class="custom-select" id="inputGrupo" name="grupo">
+                    <option value="0">Todos os alunos</option>
+                    <option value="1">Cota</option> <!-- Uma linha pra cada cota -->
+                    <option value="2">Sexo</option> <!-- Tem q ter 2 linhas no msm grafico-->
+                  </select>
+                </div>
 
-	              <div class="form-row">
-	                <button class="btn btn-primary btn-block" type="submit" name="gerar">Gerar Gráfico</button>
-	              </div>
+                <!-- Botão -->
+                <div class="form-row">
+                  <button class="btn btn-primary btn-block" type="button" id = "gerar" name="gerar">Gerar Gráfico</button>
+                </div>
 
 	            </div>
-	        </form>
+            </form>
 
 
             <!-- Bar and Pie Charts Examples-->
-            <div class="row">
+            <div class="row" id = "resposta">
               <div class="col-lg-8">
                 <div class="card mb-3">
                   <div class="card-header">
@@ -270,49 +321,69 @@
             </div>
           </div>
 
+          <!-- 3ª aba: Tabela -->
           <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-           	<form action = "" method="GET">
+           	<form id = "FormTabela">
 	            <div class="form-row " style="padding-top:1%;padding-bottom:1%;justify-content: center"> 
 	                <label for="inputGrupo" class="col-sm-1 col-form-label">Valores</label>
 	                <div class="input-group sm-2" style="width: auto;">
-	                <select class="custom-select" id="inputGrupo" name="grupo">
+	                <select class="custom-select" id="grupo" name="grupo">
 	                    <option value="0">Média das notas</option>
 	                    <option value="1">Média do tempo de conclusão</option>
 	                </select>
 	                </div>
 
 	              <div class="form-row">
-	                <button class="btn btn-primary btn-block" type="submit" name="gerar">Gerar Tabela</button>
+	                <button class="btn btn-primary btn-block" type="button" name="gerarTabela" id = "gerarTabela">Gerar Tabela</button>
 	              </div>
 	            </div>
-	        </form>
+            </form>
 
             <div class="card-body">
-              <div class="table-responsive">
+              <div class="table-responsive" id = "respostaT">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
                       <th class="text-center">Id</th>
                       <th class="text-center">Área</th>
-                      <th class="text-center">Valores</th>
+                      <?php
+                          if ($grupo2 == 1){
+                              echo "<th><center>Média das Notas</center></th>";
+                          } else if ($grupo2 == 2){
+                              echo "<th><center>Tempo Médio</center></th>";
+                          }
+                      ?>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                       <th class="text-center">Id</th>
                       <th class="text-center">Área</th>
-                      <th class="text-center">Valores</th>
+                      <?php
+                          if ($grupo2 == 1){
+                              echo "<th><center>Média das Notas</center></th>";
+                          } else if ($grupo2 == 2){
+                              echo "<th><center>Tempo Médio</center></th>";
+                          }
+                      ?>
                     </tr>
                   </tfoot>
                   <tbody>
                   <?php
-                      $ret = $areaController->buscarArea(null,null);
-                      for ($i=0; $i < count($ret); $i++) {
-                      echo "<tr>";
-                      echo "<td><center>".$ret[$i]['id']."</center></td>";
-                      echo "<td><center>".$ret[$i]['nome']."</center></td>";
-                      
-                      }
+                  	  if ($grupo2 == 1){
+
+                  	  	$ret = $proreitorController->mediaAreas();
+                  	  	for ($i=0; $i < count($ret); $i++) {
+                    	  	echo "<tr>";
+                          echo "<td><center>".$ret[$i]['id_area']."</center></td>";
+                          echo "<td><center>".$ret[$i]['nome']."</center></td>";
+                    	  	echo "<td><center>".$ret[$i]['num_acertos']."</center></td>";
+                  	  	}
+
+                  	  } else if ($grupo2 == 2){
+
+                  	  }
+        
                   ?>
                   </tbody>
                 </table>
@@ -325,11 +396,10 @@
         </div>
 
         <p class="small text-center text-muted my-5">
-          <em>More chart examples coming soon...</em>
+          <em>Estatísiticas</em>
         </p>
 
-      </div>
-      <!-- /.container-fluid -->
+      </div> <!--/container-fluid-->
 
       <!-- Sticky Footer 
       <footer class="sticky-footer">
@@ -341,8 +411,6 @@
       </footer> -->
 
     </div>
-    <!-- /.content-wrapper -->
-
   </div>
   <!-- /#wrapper -->
 

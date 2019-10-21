@@ -131,7 +131,8 @@
                     <th class="text-center">Data</th>
                     <th class="text-center">Finalizada</th>
                     <th class="text-center">Quantidade de questões</th>
-                    <th class="text-center">Nota</th>
+                    <th class="text-center">Porcentagem de acertos</th>
+                    <th class="text-center">Tempo (s)</th>
                     <th class="text-center">Visualizar Resultados</th>
                   </tr>
                 </thead>
@@ -142,7 +143,8 @@
                     <th class="text-center">Data</th>
                     <th class="text-center">Finalizada</th>
                     <th class="text-center">Quantidade de questões</th>
-                    <th class="text-center">Nota</th>
+                    <th class="text-center">Porcentagem de acertos</th>
+                    <th class="text-center">Tempo (s)</th>
                     <th class="text-center">Visualizar Resultados</th>
                   </tr>
                 </tfoot>
@@ -160,7 +162,9 @@
                             echo "<td><center>Não</center></td>";
                         
                         echo "<td><center>".$ret[$i]['num_questoes']."</center></td>";
-                        echo "<td><center>".$ret[$i]['num_acertos']."</center></td>";
+                        echo "<td><center>".$ret[$i]['nota']."</center></td>";
+                        echo "<td><center>".$ret[$i]['tempo']."</center></td>";
+
                         echo "<td><center><a href='prova_finalizada.php?id_prova=".$ret[$i]['id']."&finalizada=null&editable=false' target='_blank'>Visualizar</a></center></td>";
                         echo "</tr>";
                     }

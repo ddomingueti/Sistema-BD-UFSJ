@@ -19,6 +19,7 @@ class ProvaController {
         $questoesArea = $this->questaoDao->buscarQuestaoArea($data);
         $questoes = [];
         $num_acertos = 0;
+
         if (count($questoesArea) < $num_questoes) {
             $num_questoes = count($questoesArea);
             for ($i=0; $i<count($questoesArea); $i++) {
@@ -90,15 +91,20 @@ class ProvaController {
         $questoes = $this->buscarQuestaoProva($id_prova);
         $notaUsuario = 0;
         $totalQuestoes = 1;
+        $totalFechadas = 0;
         $numQuestoes = array_fill(0, sizeof($questoes), 0);
         $idQuestoes = array_fill(0, sizeof($questoes), 0);
         $respostasUsuario = array_fill(0, sizeof($questoes), 0);
         $gabarito = array_fill(0, sizeof($questoes), 0);
+        
 
         for ($i=0; $i<sizeof($questoes); $i++) {
             $resposta = $questoes[$i]['resposta_usuario'];
-            if (($questoes[$i]['tipo'] == "F") && ($questoes[$i]['resposta'] == $questoes[$i]['resposta_usuario'])) {
-                $notaUsuario = $notaUsuario + 1;
+            if ($questoes[$i]['tipo'] == "F") {
+                $totalFechadas = $totalFechadas + 1;
+                if ($questoes[$i]['resposta'] == $questoes[$i]['resposta_usuario']) {
+                    $notaUsuario = $notaUsuario + 1;
+                }
             }
             
             $idQuestoes[$i] = $questoes[$i]['id'];
@@ -108,11 +114,15 @@ class ProvaController {
             $totalQuestoes = $totalQuestoes + 1;
         }
 
-        
+        $pctAcerto = 0;
+        if ($totalFechadas > 0) {
+            $pctAcerto = $notaUsuario * 100 / $totalFechadas;
+        }
         if ($editable == true) {
             $data = ["id" => $id_prova,
             "finalizada" => $finalizada,
             "num_acertos" => $notaUsuario, 
+            "nota" => $pctAcerto,
             "tempo" => $tempo, ];
         
             $this->provaDao->alterarProva($data);

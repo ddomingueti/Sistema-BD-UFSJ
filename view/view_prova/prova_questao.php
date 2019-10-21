@@ -1,5 +1,5 @@
 <?php 
-    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
+    include_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/prova_controller.php";
 
     session_start();
@@ -12,7 +12,7 @@
 
     $questao_id = false;
     $questao = false;
-    $atual = false;
+    $atual = 0;
     $questoes = false;
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -24,7 +24,7 @@
             $resposta = $_POST['resposta_f'];
 
         $ret = $provaController->alterarRespostaQuestao($_POST['id_prova'], $_POST['id_questao'], $resposta);
-        
+
         $atual = $_POST['atual'];
         $editable = $_POST['editable'];
         if (($questoes[$atual]['tipo'] == "F") && ($questoes[$atual]['resposta_usuario'] == $questoes[$atual]['resposta'])) {

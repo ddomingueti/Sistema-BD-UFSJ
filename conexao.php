@@ -9,7 +9,7 @@ class Conexao {
     private $conn;
 
     private function __construct() {
-        $this->conn = new PDO('mysql:host=localhost;dbname='.$this->db_name, $this->db_user, $this->db_password);
+        $this->conn = new PDO('mysql:host=localhost;port=3308;dbname='.$this->db_name, $this->db_user, $this->db_password);
         $this->conn->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
     }
 
