@@ -112,6 +112,9 @@
             <i class="fas fa-table"></i>
             Tabela de Questões<br>
             <button type='button' class='btn btn-secondary btn-sm' onclick="location.href='register.php';">Cadastrar novo registro</button>
+            <?php if ($_SESSION['tipo_usuario'] == 0) { ?>
+                <a class='btn btn-secondary btn-sm' href='crawler.php' target="_blank">Popular banco</a>
+            <?php } ?>
         </div>
 
           <div class="card-body">
