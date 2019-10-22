@@ -162,7 +162,7 @@ class ProvaDao {
     
     public function calculaMediaAreaSexo($data){ 
 
-        $query = 'SELECT AVG(prova.num_acertos) FROM ((prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova) JOIN usuario ON prova.id_usuario = usuario.cpf) GROUP BY usuario.sexo ';
+        $query = 'SELECT AVG(prova.nota) FROM ((prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova) JOIN usuario ON prova.id_usuario = usuario.cpf) GROUP BY usuario.sexo ';
 
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
@@ -180,7 +180,7 @@ class ProvaDao {
 
     public function calculaMediaAreaCota($data){ 
 
-        $query = 'SELECT AVG(prova.num_acertos) FROM ((prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova) JOIN usuario ON prova.id_usuario = usuario.cpf) GROUP BY usuario.tipo_ingresso';
+        $query = 'SELECT AVG(prova.nota) FROM ((prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova) JOIN usuario ON prova.id_usuario = usuario.cpf) GROUP BY usuario.tipo_ingresso';
 
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
@@ -198,7 +198,7 @@ class ProvaDao {
 
     public function alunosAcimaMedia($data){
 
-        $query = 'SELECT COUNT(id_usuario) FROM prova WHERE num_acertos > (SELECT AVG(prova.num_acertos) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova)';
+        $query = 'SELECT COUNT(id_usuario) FROM prova WHERE nota > (SELECT AVG(prova.nota) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova)';
 
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
@@ -217,7 +217,7 @@ class ProvaDao {
     public function alunosAbaixoMedia($data){
 
 
-        $query = 'SELECT COUNT(id_usuario) FROM prova WHERE num_acertos < (SELECT AVG(prova.num_acertos) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova)';
+        $query = 'SELECT COUNT(id_usuario) FROM prova WHERE nota < (SELECT AVG(prova.nota) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova)';
 
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
@@ -236,7 +236,7 @@ class ProvaDao {
 
     public function alunosAcimaMediaSexo($data){
 
-        $query = 'SELECT COUNT(id_usuario), usuario.sexo FROM (prova JOIN usuario ON prova.id_usuario = usuario.cpf) WHERE num_acertos >= (SELECT AVG(prova.num_acertos) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao ) ON id_area = :id AND prova.id = formada_por.id_prova ) ) GROUP BY usuario.sexo';
+        $query = 'SELECT COUNT(id_usuario), usuario.sexo FROM (prova JOIN usuario ON prova.id_usuario = usuario.cpf) WHERE nota >= (SELECT AVG(prova.num_acertos) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao ) ON id_area = :id AND prova.id = formada_por.id_prova ) ) GROUP BY usuario.sexo';
 
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
@@ -259,7 +259,7 @@ class ProvaDao {
         $area = $areaController->buscarArea(null, $data);
         $msg = false;
 
-        $query = 'SELECT COUNT(id_usuario), usuario.tipo_ingresso FROM (prova JOIN usuario ON prova.id_usuario = usuario.cpf) WHERE num_acertos >= (SELECT AVG(prova.num_acertos) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao ) ON id_area = :id AND prova.id = formada_por.id_prova ) ) GROUP BY usuario.tipo_ingresso';
+        $query = 'SELECT COUNT(id_usuario), usuario.tipo_ingresso FROM (prova JOIN usuario ON prova.id_usuario = usuario.cpf) WHERE nota >= (SELECT AVG(prova.nota) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao ) ON id_area = :id AND prova.id = formada_por.id_prova ) ) GROUP BY usuario.tipo_ingresso';
 
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);

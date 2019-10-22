@@ -4,10 +4,10 @@ include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/model/prova_DAO.php";
 
 class ProReitorController {
 
-    private $estatisticasDAO = null;
+    private $estatisticasDAO;
 
     public function __construct() {
-        $estatisticasDAO = new ProvaDAO();
+        $this->estatisticasDAO = new ProvaDAO();
     }
 
     public function calculaMediaAreaSexo($area){ 
@@ -65,8 +65,7 @@ class ProReitorController {
 	}
 
 	public function mediaAreas(){
-
-		$ret = $this->estatisticasDAO->mediaAreas($area);
+		$ret = $this->estatisticasDAO->mediaAreas();
 		return $ret;
 
 	}
