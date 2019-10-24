@@ -15,7 +15,7 @@
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
-        $usuario = $usuarioController->buscarUsuario($_SESSION['cpf']);
+        $usuario = $usuarioController->buscarUsuario($_SESSION['cpf'], true);
         $avaliacao = $avaliacaoController->buscarAvaliacao($_GET['id'], null);
     }
 

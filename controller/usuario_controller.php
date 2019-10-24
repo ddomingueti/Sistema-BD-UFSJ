@@ -70,7 +70,7 @@ class UsuarioController {
     }
 
     public function realizarLogin($cpf, $senha) {
-        $ret = $this->buscarUsuario($cpf);
+        $ret = $this->buscarUsuario($cpf, false);
         $data = ['success' => false, 'area' => null, 'msg' => ""];
         if (count($ret) == 1) {
             $return_area = null;

@@ -13,12 +13,12 @@
     $usuarioController = new UsuarioController();
     $areaController = new AreaController();
 
-    $usu = $usuarioController->buscarUsuario($_SESSION['cpf'], true);
+    $usu = $usuarioController->buscarUsuario($_SESSION['cpf'], false);
     $gerenciadorView = new GerenciadorView();
     $area = $areaController->buscarArea(null, $usu[0]['id_area']);
     $ret = null;
     if ($_SESSION['tipo_usuario'] == 0) {
-        $ret = $questaoController->buscarQuestao(null);
+        $ret = $questaoController->buscarQuestao(null, true);
     } else {
         $ret = $questaoController->buscarQuestaoArea($area[0]['id']);
     }

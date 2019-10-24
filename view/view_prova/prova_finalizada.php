@@ -14,7 +14,6 @@
     $tempoTotal = null;
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
-        var_dump($_GET);
         if (isset($_GET['finalizada'])) {
             $tempoFinal = time();
             $finalizada = ($_GET['finalizada'] === 'true');
@@ -27,7 +26,6 @@
         } else {
             $finalizada = null;
         }
-        var_dump($finalizada);
         $editable = ($_GET['finalizada'] === 'true');
         $ret = $provaController->calculaResultadoProva($_GET['id_prova'], $finalizada, $tempoTotal, $editable);
     }

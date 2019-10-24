@@ -14,7 +14,7 @@
     if($_SERVER["REQUEST_METHOD"] == "GET") {
         
         $cpf = $_GET['cpf'];
-        $usu = $usuarioController->buscarUsuario($cpf);
+        $usu = $usuarioController->buscarUsuario($cpf, true);
         if ($usu[0]['tipo_ingresso'] == 2)
             $nome_areas = $areaController->buscarArea(null, null);
         
