@@ -15,14 +15,17 @@
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['start_time'] = time();
         $quantidade = $questaoController->quantidadeQuestaoArea($_POST['area']);
-        $quantidade = (int)$quantidade[0][0];
+        $quantidadeTotal = (int)$quantidade[0][0];
         
-        if ($quantidade == 0) {
+        if ($quantidadeTotal == 0) {
             echo "<div class='container bg-warning text-center col-md-3'>Ops! Essa área não possui questões cadastradas! Regarregue a página.</div>";
-            header('');
-        } else if ($quantidade[0] < $_POST['quantidade']) {
-            $_POST['quantidade'] = $quantidade[0];
+            //header('');
+        } 
+
+        if ((int)$_POST['quantidade'] < $quantidadeTotal) {
+            var_dump($quantidade);
             $res = $provaController->adicionarProva($_SESSION['cpf'], $_POST['quantidade'], $_POST['area']);
+            var_dump($res);
             header ('Location: prova_questao.php?id_prova='.$res['id_prova'].'&id_questao='.$res['id_questao'][0].'&atual=0&editable=true');
         }
     }

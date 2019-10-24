@@ -32,7 +32,6 @@
         }
         
         $atual = $atual + 1;
-
         if ($atual >= count($questoes)) {
             header('Location: prova_finalizada.php?id_prova='.$_POST['id_prova']."&finalizada=true&editable=true");
         } else {
@@ -91,7 +90,7 @@
                     $files = scandir($dir);
                     for ($i = 0; $i < count($files); $i++) {
                         if ($files[$i] != '.' && $files[$i] != '..') {
-                            echo '<div><center><br><img src="'.$dir."/".$files[$i].'" class="rounded">';
+                            echo '<div><center><br><img src="'.$dir."/".$files[$i].'" class="rounded" style="max-width:80%; max-height=80%">';
                             echo '<br>Figura '.($i-1).'</center></div>';
                         }
                     }
