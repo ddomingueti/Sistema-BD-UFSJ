@@ -17,7 +17,7 @@ class ProReitorController {
 
 	public function calculaMediaAreaCota($area){
 		$area = ["id" => $area,];
-		$ret = $this->estatisticasDAO->calculaMediaAreaSexo($area);
+		$ret = $this->estatisticasDAO->calculaMediaAreaCota($area);
 		return $ret;
    	}
 
@@ -55,13 +55,15 @@ class ProReitorController {
 		return $ret;
 	}
 
-	public function mediaAreaAno(){ 
-		$ret = $this->estatisticasDAO->mediaAreaAno();
+	public function mediaAreaAno($area){ 
+		$area = ["id" => $area,];
+		$ret = $this->estatisticasDAO->mediaAreaAno($area);
 		return $ret;
 	}
 
-	public function mediaTempoAreaAno(){ 
-		$ret = $this->estatisticasDAO->mediaTempoAreaAno();
+	public function mediaTempoAreaAno($area){ 
+		$area = ["id" => $area,];
+		$ret = $this->estatisticasDAO->mediaTempoAreaAno($area);
 		return $ret;
 	}
 }

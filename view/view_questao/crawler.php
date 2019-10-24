@@ -13,14 +13,14 @@ set_time_limit(0);
 if (is_dir($folder)) {
     $pastas = scandir($folder);
     $r_area = false;
-    for ($i=150; $i<count($pastas); $i++) {
+    for ($i=2; $i<count($pastas); $i++) {
         $nome_area = substr($pastas[$i], 0, -5);
         $r_area = $areaController->buscarArea(null, $nome_area);
     
         if (!$r_area) {
             $r_area = $areaController->adicionarArea($nome_area);
         }
-        
+        var_dump($nome_area);
 
         $imagem = null;
         $resposta = null;
@@ -33,7 +33,7 @@ if (is_dir($folder)) {
                 $imagem = $folder."/".$pastas[$i]."/".$entry;
                 $tem_questao = true;
             }
-            
+            var_dump($entry);
             if ($tem_questao && substr($entry, strlen($entry)-3) == "txt") {
                 $r_file = fopen($folder."/".$pastas[$i]."/".$entry, "r");
                 $resposta = fgets($r_file);
@@ -50,7 +50,6 @@ if (is_dir($folder)) {
                             "e" => "Alternativa E", ];
                     
                     $r = $questaoController->adicionarQuestao($data);
-                    var_dump($r);
                     // copia a imagem para a pasta da questão
                     copy($imagem, $r['caminho']."/".substr($imagem, strlen($imagem) - 6));
                 }

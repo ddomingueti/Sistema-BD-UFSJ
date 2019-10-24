@@ -76,7 +76,7 @@
     <li class="nav-item active">
         <a class="nav-link" href="<?php echo '//'.$gerenciadorView->getRaiz().'/view/index.php';?>">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>TreinaEnade</span>
+        <span>Início</span>
         </a>
     </li>
     

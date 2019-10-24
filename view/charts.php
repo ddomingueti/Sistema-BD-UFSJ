@@ -1,73 +1,28 @@
-<script>
-
-  Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-  Chart.defaults.global.defaultFontColor = '#292b2c';
-
-  $(document).ready(function (){
-    $("#salvar").click(function (){
-      var form = new FormData($("#formulario")[0]);
-      $.ajax({
-        url: 'recebeDados.php',
-        type: 'post',
-        dataType: 'json',
-        cache: false,
-        processData: false,
-        contentType: false,
-        data: form,
-        timeout: 8000,
-        success: function(resultado){
-          $("#resposta").html(resultado);
-        }
-      });
-    });
-  });
-
-</script>
-
 <?php
+
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_proreitor_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
+    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/view_manager.php";
 
-    $proreitorController = new ProReitorController();
-    $areaController = new AreaController();
-    $nome_areas = $areaController->buscarArea(null, null);
-    $msg = false;
-    $grupo1 = null;
-    $grupo2 = null;
-
-    if($_SERVER["REQUEST_METHOD"] == "POST") {
-    	if(isset($_POST['area']) && isset($_POST['grupo'])){
-	    	$area =  $_POST['area'];
-        $grupo1 = $_POST['grupo'];
-        echo $area;
-        echo $grupo1;
-	    }
-    }   
-
-   /* if($_SERVER["REQUEST_METHOD"] == "GET") {
-    	if(isset($_GET['grupo'])) {
-	   		$grupo2 = $_GET['grupo'];
-        echo $grupo2;
-	   	}
-    } */
-   	
+    session_start();
+    if((!isset ($_SESSION['cpf']) == true) and (!isset ($_SESSION['tipo_usuario']) == true)) {
+        header('location: ../../index.php');
+    }
+    $gerenciadorView = new GerenciadorView();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
   <meta charset="utf-8">
-  <script src="js/jquery-3.1.1.min.js" type="text/javascript"></script>
-  <script src="js/charts.js" type="text/javascript"></script>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin - Charts</title>
+  <title>TreinaEnade</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -82,317 +37,74 @@
 
 <body id="page-top">
 
-  <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="index.html">Start Bootstrap</a>
+<a class="navbar-brand mr-1" href="index.php">TreinaEnade</a>
 
-    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
-      <i class="fas fa-bars"></i>
-    </button>
+<button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+  <i class="fas fa-bars"></i>
+</button>
 
-    <!-- Navbar Search -->
-    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-        <div class="input-group-append">
-          <button class="btn btn-primary" type="button">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </form>
+<!-- Navbar Search -->
+<form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
 
-    <!-- Navbar -->
-    <ul class="navbar-nav ml-auto ml-md-0">
-      <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-bell fa-fw"></i>
-          <span class="badge badge-danger">9+</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-envelope fa-fw"></i>
-          <span class="badge badge-danger">7</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-user-circle fa-fw"></i>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-          <a class="dropdown-item" href="#">Settings</a>
-          <a class="dropdown-item" href="#">Activity Log</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
-        </div>
-      </li>
-    </ul>
+</form>
 
-  </nav>
+<!-- Navbar -->
+<ul class="navbar-nav ml-auto ml-md-0">
+  <li class="nav-item dropdown no-arrow">
+    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-user-circle fa-fw"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+      <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+    </div>
+  </li>
+</ul>
 
-  <div id="wrapper">
+</nav>
 
-    <!-- Sidebar -->
-    <ul class="sidebar navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Pages</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <h6 class="dropdown-header">Login Screens:</h6>
-          <a class="dropdown-item" href="login.html">Login</a>
-          <a class="dropdown-item" href="register.html">Register</a>
-          <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
-          <div class="dropdown-divider"></div>
-          <h6 class="dropdown-header">Other Pages:</h6>
-          <a class="dropdown-item" href="404.html">404 Page</a>
-          <a class="dropdown-item" href="blank.html">Blank Page</a>
-        </div>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
-      </li>
-    </ul>
-
+<div id="wrapper">
+<!-- Sidebar -->
+<ul class="sidebar navbar-nav">
+  <li class="nav-item active">
+    <a class="nav-link" href="<?php echo '//'.$gerenciadorView->getRaiz().'/view/index.php';?>">
+      <i class="fas fa-fw fa-tachometer-alt"></i>
+      <span>Início</span>
+    </a>
+  </li>
+  
+  <?php 
+    if ($_SESSION['tipo_usuario'] == 0) { //administrador
+        echo $gerenciadorView->exibeSidebarRelatorio();
+        echo $gerenciadorView->exibeSidebarUsuario();
+        echo $gerenciadorView->exibeSidebarAvaliacao();
+        echo $gerenciadorView->exibeSidebarArea();
+        echo $gerenciadorView->exibeSidebarQuestao();
+        echo $gerenciadorView->exibeSidebarProva();
+    } else if ($_SESSION['tipo_usuario'] == 1) { //aluno
+        echo $gerenciadorView->exibeSidebarProva();
+    } else if ($_SESSION['tipo_usuario'] == 2) { // professor
+        echo $gerenciadorView->exibeSidebarAvaliacao();
+        echo $gerenciadorView->exibeSidebarQuestao();
+    } else if ($_SESSION['tipo_usuario'] == 3) { //pro reitor
+        echo $gerenciadorView->exibeSidebarRelatorio();
+        echo $gerenciadorView->exibeSidebarAvaliacao();
+    }
+  ?>
+</ul>
     <!-- Conteúdo -->
     <div id="content-wrapper">
-
-      <div class="container-fluid">
-
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">Charts</li>
-        </ol>
-
-        <!-- Barra de Navegação (Grupos) -->
-        <nav>
-          <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Estatísticas por Ano</a>
-            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Estatísticas dos Cursos</a>
-            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Tabelas</a>
-          </div>
-        </nav>
-
-        <!-- abas -->
-        <div class="tab-content" id="nav-tabContent">
-
-          <!-- 1ª aba: Gráfico de Linha -->
-          <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-
-          	<form id = "formulario" >
-	            <div class="form-inline "style="padding-top:1%;padding-bottom:1%;justify-content: center"> 
-
-                <!-- Dropdown Áreas -->
-	              <label for="inputArea" class="col-sm-1 col-form-label">Área</label>
-	              <div class="input-group sm-2" style="width: auto;">
-	                <select class="custom-select" id="inputArea" name="area">
-	                  <option value="N" selected>Nenhuma</option>
-	                  <?php 
-	                    foreach ($nome_areas as $item) {
-	                    echo '<option value="'.$item['id'].'">'.$item['nome'].'</option>';                   
-	                  }
-	                  ?>
-	                </select>
-	              </div>
-
-                <!-- Dropdown Grupos -->
-	              <label for="inputGrupo" class="col-sm-1 col-form-label">Grupo</label>
-	              <div class="input-group sm-2" style="width: auto;">
-	                <select class="custom-select" id="inputGrupo" name="grupo">
-	                  <option value="0">Todos os alunos</option>
-	                  <option value="1">Cota</option> <!-- Uma linha pra cada cota -->
-	                  <option value="2">Sexo</option> <!-- Tem q ter 2 linhas no msm grafico-->
-	                </select>
-	              </div>
-
-                <!-- Botão -->
-	              <div class="form-row">
-	                <button class="btn btn-primary btn-block" type="button" id = "gerar" name="gerar">Gerar Gráfico</button>
-	              </div>
-
-	            </div>
-        	 </form>
-
-            <!-- Area Chart Example-->
-            <div class="card mb-3" id = "resposta">
-              <div class="card-header">
-                <i class="fas fa-chart-area"></i>
-                Area Chart Example</div>
-              <div class="card-body">
-                <canvas id="myAreaChart" width="100%" height="30"></canvas>
-              </div>
-              <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
-          </div>
-
-          <!-- 2ª aba: Gráfico de Barras e Pizza -->
-          <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-            
-            <!-- Menu -->    
-            <form action = "" method="POST">       
-	            <div class="form-inline " style="padding-top:1%;padding-bottom:1%;justify-content: center"> 
-                
-                <!-- Dropdown áreas -->
-                <label for="inputArea" class="col-sm-1 col-form-label">Área</label>
-                <div class="input-group sm-2" style="width: auto;">
-                  <select class="custom-select" id="inputArea" name="area">
-                    <option value="N" selected>Nenhuma</option>
-                    <?php 
-                      foreach ($nome_areas as $item) {
-                      echo '<option value="'.$item['id'].'">'.$item['nome'].'</option>';                   
-                    }
-                    ?>
-                  </select>
-                </div>
-
-                <!-- Dropdown Grupos -->
-                <label for="inputGrupo" class="col-sm-1 col-form-label">Grupo</label>
-                <div class="input-group sm-2" style="width: auto;">
-                  <select class="custom-select" id="inputGrupo" name="grupo">
-                    <option value="0">Todos os alunos</option>
-                    <option value="1">Cota</option> <!-- Uma linha pra cada cota -->
-                    <option value="2">Sexo</option> <!-- Tem q ter 2 linhas no msm grafico-->
-                  </select>
-                </div>
-
-                <!-- Botão -->
-                <div class="form-row">
-                  <button class="btn btn-primary btn-block" type="button" id = "gerar" name="gerar">Gerar Gráfico</button>
-                </div>
-
-	            </div>
-            </form>
-
-
-            <!-- Bar and Pie Charts Examples-->
-            <div class="row" id = "resposta">
-              <div class="col-lg-8">
-                <div class="card mb-3">
-                  <div class="card-header">
-                    <i class="fas fa-chart-bar"></i>
-                    Bar Chart Example</div>
-                  <div class="card-body">
-                    <canvas id="myBarChart" width="100%" height="50"></canvas>
-                  </div>
-                  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="card mb-3">
-                  <div class="card-header">
-                    <i class="fas fa-chart-pie"></i>
-                    Pie Chart Example</div>
-                  <div class="card-body">
-                    <canvas id="myPieChart" width="100%" height="100"></canvas>
-                  </div>
-                  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 3ª aba: Tabela -->
-          <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-           	<form id = "FormTabela">
-	            <div class="form-row " style="padding-top:1%;padding-bottom:1%;justify-content: center"> 
-	                <label for="inputGrupo" class="col-sm-1 col-form-label">Valores</label>
-	                <div class="input-group sm-2" style="width: auto;">
-	                <select class="custom-select" id="grupo" name="grupo">
-	                    <option value="0">Média das notas</option>
-	                    <option value="1">Média do tempo de conclusão</option>
-	                </select>
-	                </div>
-
-	              <div class="form-row">
-	                <button class="btn btn-primary btn-block" type="button" name="gerarTabela" id = "gerarTabela">Gerar Tabela</button>
-	              </div>
-	            </div>
-            </form>
-
-            <div class="card-body">
-              <div class="table-responsive" id = "respostaT">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th class="text-center">Id</th>
-                      <th class="text-center">Área</th>
-                      <?php
-                          if ($grupo2 == 1){
-                              echo "<th><center>Média das Notas</center></th>";
-                          } else if ($grupo2 == 2){
-                              echo "<th><center>Tempo Médio</center></th>";
-                          }
-                      ?>
-                    </tr>
-                  </thead>
-                  <tfoot>
-                    <tr>
-                      <th class="text-center">Id</th>
-                      <th class="text-center">Área</th>
-                      <?php
-                          if ($grupo2 == 1){
-                              echo "<th><center>Média das Notas</center></th>";
-                          } else if ($grupo2 == 2){
-                              echo "<th><center>Tempo Médio</center></th>";
-                          }
-                      ?>
-                    </tr>
-                  </tfoot>
-                  <tbody>
-                  <?php
-                  	  if ($grupo2 == 1){
-
-                  	  	$ret = $proreitorController->mediaAreas();
-                  	  	for ($i=0; $i < count($ret); $i++) {
-                    	  	echo "<tr>";
-                          echo "<td><center>".$ret[$i]['id_area']."</center></td>";
-                          echo "<td><center>".$ret[$i]['nome']."</center></td>";
-                    	  	echo "<td><center>".$ret[$i]['num_acertos']."</center></td>";
-                  	  	}
-
-                  	  } else if ($grupo2 == 2){
-
-                  	  }
-        
-                  ?>
-                  </tbody>
-                </table>
-                
-              
-              </div>
-            </div>  
-
-          </div>
+        <div class="container">
+        Para visualizar um conjuinto de estatísticas geradas pelo sistema, clique em um dos links abaixo.
+        <p>
+        <ul>
+            <li><a href="charts_grupo1.php">Estatísiticas sobre tempo, área e nota das provas dos estudantes</a></li>
+            <li><a href="charts_grupo2.php">Estatísiticas sobre cotas, sexo e notas das provas dos estudantes </a></li>            
+            <li><a href="charts_grupo3.php">Estatísiticas sobre notas das provas dos estudantes divididos por área</a></li> 
+        </ul>
+        </div>
+        </div>
         </div>
 
         <p class="small text-center text-muted my-5">
@@ -424,15 +136,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Deseja Sair?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-body">Selecione "Sair" abaixo se está pronto para sair do sistema.</div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+          <a class="btn btn-primary" href="<?php echo '//'.$gerenciadorView->getRaiz().'/view/logout.php';?>">Sair</a>
         </div>
       </div>
     </div>
