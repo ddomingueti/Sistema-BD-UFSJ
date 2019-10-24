@@ -118,14 +118,19 @@ class ProvaController {
         if ($totalFechadas > 0) {
             $pctAcerto = $notaUsuario * 100 / $totalFechadas;
         }
+        
+        var_dump($editable);
+        
         if ($editable == true) {
             $data = ["id" => $id_prova,
             "finalizada" => $finalizada,
             "num_acertos" => $notaUsuario, 
             "nota" => $pctAcerto,
-            "tempo" => $tempo, ];
+            "tempo" => $tempo, 
+            "data" => null, ];
         
             $this->provaDao->alterarProva($data);
+            
         }
 
 

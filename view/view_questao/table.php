@@ -1,6 +1,7 @@
 <?php
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_controller.php";
+    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/view_manager.php";
 
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
@@ -13,14 +14,16 @@
     $questaoController = new QuestaoController();
     $areaController = new AreaController();
     $usuarioController = new UsuarioController();
-    $usu = $usuarioController->buscarUsuario($_SESSION['cpf']);
+    $areaController = new AreaController();
+
+    $usu = $usuarioController->buscarUsuario($_SESSION['cpf'], true);
     $gerenciadorView = new GerenciadorView();
-    
+    $area = $areaController->buscarArea(null, $usu[0]['id_area']);
     $ret = null;
     if ($_SESSION['tipo_usuario'] == 0) {
-        $ret = $questaoController->buscarQuestao(null, true);
-    } else {    
-        $ret = $questaoController->buscarQuestaoArea($usu[0]['id_area']);
+        $ret = $questaoController->buscarQuestao(null);
+    } else {
+        $ret = $questaoController->buscarQuestaoArea($area[0]['id']);
     }
 
     $folder = $_SERVER['DOCUMENT_ROOT']."/sistema-bd-ufsj/Crawler/Questoes";
@@ -211,13 +214,13 @@
                     for ($i=0; $i < count($ret); $i++) {
                         echo "<tr>";
                         echo "<td><center>".$ret[$i]['id']."</center></td>";
-                        echo "<td><center>".$ret[$i]['id_area']."</center></td>";
+                        echo "<td><center>".$area[0]['nome']."</center></td>";
                         echo "<td><center>".$ret[$i]['tipo']."</center></td>";
                         echo "<td><center>".$ret[$i]['enunciado']."</center></td>";
                         echo "<td><center>".$ret[$i]['resposta']."</center></td>";
                         echo "<td><center>".$ret[$i]['num_acertos']."</center></td>";
-                        echo "<td><center><a href='remove.php?id=".$ret[$i]['id']."'>Remover</a></center></center></td>";
                         echo "<td><center><a href='change.php?id=".$ret[$i]['id']."'>Alterar</a></center></center></td>";
+                        echo "<td><center><a href='remove.php?id=".$ret[$i]['id']."'>Remover</a></center></center></td>";
                         echo "</tr>";
                     }
                 ?>

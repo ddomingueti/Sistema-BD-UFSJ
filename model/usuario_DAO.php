@@ -81,20 +81,20 @@ class UsuarioDao {
             }
             $stmt->execute();
             $result = $stmt->fetchAll();
-
-            for ($i=0; $i<count($result); $i++) {
-                if ($result[$i]['id_area'] != null) {
-                    $query = 'SELECT nome from area WHERE id=:id';
-                    $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-                    $stmt->bindParam('id', $result[$i]['id_area']);
-                    $stmt->execute();
-                    $res_nomes = $stmt->fetchAll();
-                    $result[$i]['id_area'] = $res_nomes[0]['nome'];
-                } else {
-                    $result[$i]['id_area'] = '-';
+            if ($data['legivel']) {
+                for ($i=0; $i<count($result); $i++) {
+                    if ($result[$i]['id_area'] != null) {
+                        $query = 'SELECT nome from area WHERE id=:id';
+                        $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+                        $stmt->bindParam('id', $result[$i]['id_area']);
+                        $stmt->execute();
+                        $res_nomes = $stmt->fetchAll();
+                        $result[$i]['id_area'] = $res_nomes[0]['nome'];
+                    } else {
+                        $result[$i]['id_area'] = '-';
+                    }
                 }
             }
-
             return $result;
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();

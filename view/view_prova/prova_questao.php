@@ -40,7 +40,6 @@
         }
         
         $atual = $atual + 1;
-
         if ($atual >= count($questoes)) {
             header('Location: prova_finalizada.php?id_prova='.$_POST['id_prova']."&finalizada=true&editable=true");
         } else {
@@ -106,6 +105,7 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
           <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
         </div>
+
       </li>
     </ul>
   </nav>
@@ -162,6 +162,16 @@
                                 echo '<div><center><br><img src="'.$dir."/".$files[$i].'" class="rounded">';
                                 echo '<br>Figura '.($i-1).'</center></div>';
                             }
+        <?php
+            $dir = "../../resources/".$questao[0]['id_area']."/".$questao[0]['id'];
+            if (file_exists($dir)) {
+                $isDirEmpty = !(new \FilesystemIterator($dir))->valid();
+                if (!$isDirEmpty) {
+                    $files = scandir($dir);
+                    for ($i = 0; $i < count($files); $i++) {
+                        if ($files[$i] != '.' && $files[$i] != '..') {
+                            echo '<div><center><br><img src="'.$dir."/".$files[$i].'" class="rounded" style="max-width:80%; max-height=80%">';
+                            echo '<br>Figura '.($i-1).'</center></div>';
                         }
                     }
                 }

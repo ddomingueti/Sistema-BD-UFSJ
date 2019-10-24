@@ -141,7 +141,7 @@
                 </tfoot>
                 <tbody>
                 <?php
-                    $ret = $usuarioController->buscarUsuario(null);
+                    $ret = $usuarioController->buscarUsuario(null, true);
                     for ($i=0; $i < count($ret); $i++) {
                     echo "<tr>";
                     echo "<td><center>".$ret[$i]['nome']."</center></td>";

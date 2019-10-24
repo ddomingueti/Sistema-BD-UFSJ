@@ -48,8 +48,8 @@ class UsuarioController {
         return $ret;
     }
 
-    public function buscarUsuario($cpf) {
-        $data = [ "cpf" => $cpf, ];
+    public function buscarUsuario($cpf, $legivel) {
+        $data = [ "cpf" => $cpf, "legivel" => $legivel];
         $ret = $this->usuarioDao->buscarUsuario($data);
         return $ret;
     }

@@ -20,7 +20,9 @@ class ProvaDao {
                 $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
                 $stmt->bindParam(':id_prova', $id_prova);
                 $stmt->bindParam(':id_questao', $data['questoes'][$i]);
-                $stmt->execute();
+                $r2 = $stmt->execute();
+                if (!$r2)
+                    print_r($stmt->errorInfo()); 
             }
             return [ "success" => true, "id_prova" => $id_prova, "id_questao" => $data['questoes']];
         } catch (PDOEXception $e) {
@@ -42,14 +44,22 @@ class ProvaDao {
      }
 
     public function alterarProva($data) { 
-        $query = 'UPDATE prova SET data=:data, finalizada=:finalizada, nota=:nota WHERE id_prova=:id_prova';
+        if ($data['data'] != null)
+            $query = 'UPDATE prova SET data=:data, finalizada=:finalizada, nota=:nota WHERE id=:id_prova';
+        else
+            $query = 'UPDATE prova SET finalizada=:finalizada, nota=:nota WHERE id=:id_prova';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':data', $data['data']);
+            if ($data['data'] != null)
+                $stmt->bindParam(':data', $data['data']);
+             
             $stmt->bindParam(':finalizada', $data['finalizada']);
             $stmt->bindParam(':nota', $data['nota']);
             $stmt->bindParam(':id_prova', $data['id']);
             $r = $stmt->execute();
+            if (!$r) {
+                print_r($stmt->errorInfo());
+            }
             $result = $stmt->fetchAll();
             return $result;
         } catch (PDOEXception $e) {
@@ -93,6 +103,16 @@ class ProvaDao {
             $stmt->bindParam(':id_usuario', $data['id_usuario']);
             $stmt->execute();
             $result = $stmt->fetchAll();
+            for ($i = 0; $i < count($result); $i++) {
+                $query = 'SELECT COUNT(formada_por.id_questao) FROM formada_por
+                WHERE formada_por.id_prova = '.$result[$i]['id'];
+                $stmt = $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+                $stmt->bindParam(':id', $data['id']);    
+                $stmt->execute();
+                $num_questoes = $stmt->fetchAll();
+                $formated = [ 'num_questoes' => $num_questoes[0][0]];
+                $result[$i] += $formated;
+            }
             return $result;
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();
