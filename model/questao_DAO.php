@@ -6,7 +6,7 @@ class QuestaoDao {
     public function adicionarQuestao($data) { 
         $query = 'INSERT INTO questoes (id_area, tipo, enunciado, resposta, num_acertos, a, b, c, d, e) 
         VALUES (:id_area, :tipo, :enunciado, :resposta, :num_acertos, :a, :b, :c, :d, :e)';
-
+        $ret = null;
         try {
             $acertos = 0;
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
@@ -22,9 +22,14 @@ class QuestaoDao {
             $stmt->bindParam(':e', $data['e']);
             
             $e = $stmt->execute();
+            if (!$e) {
+                $ret = $stmt->errorInfo();
+            }
             $result = $stmt->fetchAll();
+            $id = Conexao::get_instance()->get_conexao()->lastInsertId();
+            $caminho = $_SERVER['DOCUMENT_ROOT'].'/sistema-bd-ufsj/resources/'.$data['id_area'].'/'.$id;
             if ($e) {
-                $id = Conexao::get_instance()->get_conexao()->lastInsertId();
+                
                 $caminho = $_SERVER['DOCUMENT_ROOT'].'/sistema-bd-ufsj/resources/'.$data['id_area'].'/'.$id;
                 mkdir($caminho, 0777, true);
 
@@ -33,8 +38,14 @@ class QuestaoDao {
                 $stmt->bindParam(':id', $id);
                 $stmt->bindParam(':caminho', $caminho);
                 $stmt->execute();
+                
+            } else {
+                $ret = $stmt->errorInfo();
             }
-            return $result;
+            if (is_null($ret)) {
+                $ret = ["id" => $id, "id_area" => $data['id_area'], "caminho" => $caminho, ];
+            }
+            return $ret;
         } catch (PDOException $e) {
             return "Erro: ".$e->getMessage();
         }

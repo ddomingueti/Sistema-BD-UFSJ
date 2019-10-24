@@ -13,6 +13,9 @@ class AreaDao {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':nome', $data['nome']);
             $result = $stmt->execute();
+            
+            $id = Conexao::get_instance()->get_conexao()->lastInsertId();
+            $result = ["nome" => $data['nome'], "id" => $id, ];
             return $result;
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();
@@ -60,7 +63,7 @@ class AreaDao {
             if ($data['id'] != null)
                 $stmt->bindParam(':id', $data['id']);
             else if ($data['nome'] != null)
-                $stmt->bindParam(':nome', $data['nome']);
+                $stmt->bindParam(':nome', $data['nome']);   
             else {
                 $stmt->bindParam(':nome', $data['nome']);
                 $stmt->bindParam(':id', $data['id']);
@@ -68,7 +71,6 @@ class AreaDao {
             
             $stmt->execute();
             $result = $stmt->fetchAll();
-            
             return $result;
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();

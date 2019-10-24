@@ -4,13 +4,13 @@ require_once "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/conexao.php";
 class ProvaDao {
 
     public function adicionarProva($data) {
-        $query = 'INSERT INTO prova(data, finalizada, num_acertos, id_usuario) 
-        VALUES (:data, :finalizada, :num_acertos, :id_usuario)';
+        $query = 'INSERT INTO prova(data, finalizada, nota, id_usuario) 
+        VALUES (:data, :finalizada, :nota, :id_usuario)';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':data', $data['data']);
             $stmt->bindParam(':finalizada', $data['finalizada'], PDO::PARAM_BOOL);
-            $stmt->bindParam(':num_acertos', $data['num_acertos']);
+            $stmt->bindParam(':nota', $data['nota']);
             $stmt->bindParam(':id_usuario', $data['id_usuario']);
             $r1 = $stmt->execute();
             $id_prova = Conexao::get_instance()->get_conexao()->lastInsertId();
@@ -20,7 +20,7 @@ class ProvaDao {
                 $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
                 $stmt->bindParam(':id_prova', $id_prova);
                 $stmt->bindParam(':id_questao', $data['questoes'][$i]);
-                $r2 = $stmt->execute();
+                $stmt->execute();
             }
             return [ "success" => true, "id_prova" => $id_prova, "id_questao" => $data['questoes']];
         } catch (PDOEXception $e) {
@@ -42,18 +42,14 @@ class ProvaDao {
      }
 
     public function alterarProva($data) { 
-        $query = 'UPDATE prova SET finalizada=:finalizada, num_acertos=:num_acertos, nota=:nota, tempo=:tempo WHERE id=:id_prova';
+        $query = 'UPDATE prova SET data=:data, finalizada=:finalizada, nota=:nota WHERE id_prova=:id_prova';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            $stmt->bindParam(':finalizada', $data['finalizada'], PDO::PARAM_BOOL);
-            $stmt->bindParam(':num_acertos', $data['num_acertos']);
+            $stmt->bindParam(':data', $data['data']);
+            $stmt->bindParam(':finalizada', $data['finalizada']);
             $stmt->bindParam(':nota', $data['nota']);
-            $stmt->bindParam(':tempo', $data['tempo']);
             $stmt->bindParam(':id_prova', $data['id']);
             $r = $stmt->execute();
-            if (!$r) {
-                print_r($stmt->errorInfo());
-            }
             $result = $stmt->fetchAll();
             return $result;
         } catch (PDOEXception $e) {
@@ -98,16 +94,6 @@ class ProvaDao {
             $stmt->bindParam(':id_usuario', $data['id_usuario']);
             $stmt->execute();
             $result = $stmt->fetchAll();
-            for ($i = 0; $i < count($result); $i++) {
-                $query = 'SELECT COUNT(formada_por.id_questao) FROM formada_por
-                WHERE formada_por.id_prova = '.$result[$i]['id'];
-                $stmt = $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-                $stmt->bindParam(':id', $data['id']);    
-                $stmt->execute();
-                $num_questoes = $stmt->fetchAll();
-                $formated = [ 'num_questoes' => $num_questoes[0][0]];
-                $result[$i] += $formated;
-            }
             return $result;
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();
@@ -158,12 +144,8 @@ class ProvaDao {
         }   
     }
 
-    //Estatisticas Gerais
-    
     public function calculaMediaAreaSexo($data){ 
-
-        $query = 'SELECT AVG(prova.nota) FROM ((prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova) JOIN usuario ON prova.id_usuario = usuario.cpf) GROUP BY usuario.sexo ';
-
+        $query = 'SELECT AVG(prova.nota), usuario.sexo FROM ((prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova) JOIN usuario ON prova.id_usuario = usuario.cpf) GROUP BY usuario.sexo ';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             if ($data['id'] != null)
@@ -177,11 +159,8 @@ class ProvaDao {
             return "Erro: ".$e->getMessage();
         }
     }
-
     public function calculaMediaAreaCota($data){ 
-
-        $query = 'SELECT AVG(prova.nota) FROM ((prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova) JOIN usuario ON prova.id_usuario = usuario.cpf) GROUP BY usuario.tipo_ingresso';
-
+        $query = 'SELECT AVG(prova.nota), usuario.tipo_ingresso FROM ((prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova) JOIN usuario ON prova.id_usuario = usuario.cpf) GROUP BY usuario.tipo_ingresso';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             if ($data['id'] != null)
@@ -195,17 +174,17 @@ class ProvaDao {
                 return "Erro: ".$e->getMessage();
         }
     }
-
     public function alunosAcimaMedia($data){
-
         $query = 'SELECT COUNT(id_usuario) FROM prova WHERE nota > (SELECT AVG(prova.nota) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova)';
-
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
-            if ($data['id'] != null)
-                $stmt->bindParam(':id', $data['id']);
+            
+            $stmt->bindParam(':id', $data['id']);
                 
-            $stmt->execute();
+            $e = $stmt->execute();
+            if (!$e)
+                print_r($stmt->errorInfo());
+
             $result = $stmt->fetchAll();
              
             return $result;
@@ -213,12 +192,8 @@ class ProvaDao {
             return "Erro: ".$e->getMessage();
         }
     }
-
     public function alunosAbaixoMedia($data){
-
-
         $query = 'SELECT COUNT(id_usuario) FROM prova WHERE nota < (SELECT AVG(prova.nota) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON id_area = :id AND prova.id = formada_por.id_prova)';
-
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             if ($data['id'] != null)
@@ -231,13 +206,9 @@ class ProvaDao {
         } catch (PDOEXception $e) {
                 return "Erro: ".$e->getMessage();
         }
-
     }
-
     public function alunosAcimaMediaSexo($data){
-
-        $query = 'SELECT COUNT(id_usuario), usuario.sexo FROM (prova JOIN usuario ON prova.id_usuario = usuario.cpf) WHERE nota >= (SELECT AVG(prova.num_acertos) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao ) ON id_area = :id AND prova.id = formada_por.id_prova ) ) GROUP BY usuario.sexo';
-
+        $query = 'SELECT COUNT(id_usuario), usuario.sexo FROM (prova JOIN usuario ON prova.id_usuario = usuario.cpf) WHERE nota >= (SELECT AVG(prova.nota) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao ) ON id_area = :id AND prova.id = formada_por.id_prova ) ) GROUP BY usuario.sexo';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             if ($data['id'] != null)
@@ -250,17 +221,12 @@ class ProvaDao {
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();
         }
-
     }
-
     public function alunosAcimaMediaCota($data){
-
         $areaController = new AreaController();
-        $area = $areaController->buscarArea(null, $data);
+        $area = $areaController->buscarArea(null, $data['id']);
         $msg = false;
-
         $query = 'SELECT COUNT(id_usuario), usuario.tipo_ingresso FROM (prova JOIN usuario ON prova.id_usuario = usuario.cpf) WHERE nota >= (SELECT AVG(prova.nota) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao ) ON id_area = :id AND prova.id = formada_por.id_prova ) ) GROUP BY usuario.tipo_ingresso';
-
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             if ($data['id'] != null)
@@ -273,13 +239,9 @@ class ProvaDao {
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();
         }
-
     }
-
     public function mediaAreas(){
-
-        $query = 'SELECT  id_area, area.nome, AVG(prova.num_acertos) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON prova.id = formada_por.id_prova), area WHERE id_area = area.id GROUP BY id_area';
-
+        $query = 'SELECT  id_area, area.nome, AVG(prova.nota) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON prova.id = formada_por.id_prova), area WHERE id_area = area.id GROUP BY id_area';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
                                 
@@ -290,13 +252,35 @@ class ProvaDao {
         } catch (PDOEXception $e) {
             return "Erro: ".$e->getMessage();
         }
-
     }
-
+    public function mediaTempoAreas(){
+        $query = 'SELECT  id_area, area.nome, AVG(prova.tempo) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON prova.id = formada_por.id_prova), area WHERE id_area = area.id GROUP BY id_area';
+        try {
+            $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+                                
+                $stmt->execute();
+                $result = $stmt->fetchAll();
+                
+            return $result;
+        } catch (PDOEXception $e) {
+            return "Erro: ".$e->getMessage();
+        }
+    }
     public function mediaAreaAno(){
-
-        $query = 'SELECT AVG(prova.num_acertos), area.nome, YEAR(data) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON prova.id = formada_por.id_prova), area WHERE id_area = area.id GROUP BY YEAR(data)';
-
+        $query = 'SELECT AVG(prova.nota), area.nome, YEAR(data) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON prova.id = formada_por.id_prova), area WHERE id_area = area.id GROUP BY YEAR(data)';
+        try {
+            $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
+                               
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+               
+            return $result;
+        } catch (PDOEXception $e) {
+            return "Erro: ".$e->getMessage();
+        }
+    }
+    public function mediaTempoAreaAno(){
+        $query = 'SELECT AVG(prova.tempo), area.nome, YEAR(data) FROM (prova JOIN (questoes JOIN formada_por ON questoes.id = formada_por.id_questao) ON prova.id = formada_por.id_prova), area WHERE id_area = area.id GROUP BY YEAR(data)';
         try {
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
                                
