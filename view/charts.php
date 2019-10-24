@@ -95,17 +95,16 @@
 </ul>
     <!-- Conteúdo -->
     <div id="content-wrapper">
-        <div class="container">
-        Para visualizar um conjuinto de estatísticas geradas pelo sistema, clique em um dos links abaixo.
-        <p>
-        <ul>
-            <li><a href="charts_grupo1.php">Estatísiticas sobre tempo, área e nota das provas dos estudantes</a></li>
-            <li><a href="charts_grupo2.php">Estatísiticas sobre cotas, sexo e notas das provas dos estudantes </a></li>            
-            <li><a href="charts_grupo3.php">Estatísiticas sobre notas das provas dos estudantes divididos por área</a></li> 
-        </ul>
-        </div>
-        </div>
-        </div>
+
+      <div class="jumbotron">
+        <h1 class="display-5">Relatórios</h1>
+
+        <hr class="my-4">
+        <p>Para visualizar um conjuinto de estatísticas geradas pelo sistema, clique em um dos links abaixo.</p>
+        <a class="btn btn-primary btn-lg" href="charts_grupo1.php" role="button">Estatísticas por Ano</a>
+        <a class="btn btn-primary btn-lg" href="charts_grupo2.php" role="button">Estatísticas por Grupo</a>
+        <a class="btn btn-primary btn-lg" href="charts_grupo3.php" role="button">Estatísticas por Área</a>
+      </div>
 
         <p class="small text-center text-muted my-5">
           <em>Estatísiticas</em>
