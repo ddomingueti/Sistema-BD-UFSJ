@@ -32,8 +32,9 @@
             $resposta = $_POST['resposta_f'];
 
         $ret = $provaController->alterarRespostaQuestao($_POST['id_prova'], $_POST['id_questao'], $resposta);
+        
+        $atual = (int)$_POST['atual'];
 
-        $atual = $_POST['atual'];
         $editable = $_POST['editable'];
         if (($questoes[$atual]['tipo'] == "F") && ($questoes[$atual]['resposta_usuario'] == $questoes[$atual]['resposta'])) {
             $questaoController->incrementarNumAcertos($questoes[$atual]['id']);
@@ -45,7 +46,6 @@
         } else {
             header ('Location: prova_questao.php?id_prova='.$_POST['id_prova'].'&id_questao='.$questoes[$atual]['id'].'&atual='.$atual.'&editable='.$editable);
         }
-
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -159,23 +159,12 @@
                         $files = scandir($dir);
                         for ($i = 0; $i < count($files); $i++) {
                             if ($files[$i] != '.' && $files[$i] != '..') {
-                                echo '<div><center><br><img src="'.$dir."/".$files[$i].'" class="rounded">';
+                                echo '<div><center><br><img src="'.$dir."/".$files[$i].'" class="rounded" style="max-width:80%; max-heigth=80%;">';
                                 echo '<br>Figura '.($i-1).'</center></div>';
                             }
-        <?php
-            $dir = "../../resources/".$questao[0]['id_area']."/".$questao[0]['id'];
-            if (file_exists($dir)) {
-                $isDirEmpty = !(new \FilesystemIterator($dir))->valid();
-                if (!$isDirEmpty) {
-                    $files = scandir($dir);
-                    for ($i = 0; $i < count($files); $i++) {
-                        if ($files[$i] != '.' && $files[$i] != '..') {
-                            echo '<div><center><br><img src="'.$dir."/".$files[$i].'" class="rounded" style="max-width:80%; max-height=80%">';
-                            echo '<br>Figura '.($i-1).'</center></div>';
                         }
                     }
                 }
-
             ?>
 
             <form action="" method="POST">

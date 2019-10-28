@@ -1,7 +1,6 @@
 <?php
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/questao_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/usuario_controller.php";
-    include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/view_manager.php";
 
     include "$_SERVER[DOCUMENT_ROOT]/sistema-bd-ufsj/controller/area_controller.php";
@@ -18,71 +17,14 @@
 
     $usu = $usuarioController->buscarUsuario($_SESSION['cpf'], false);
     $gerenciadorView = new GerenciadorView();
-    $area = $areaController->buscarArea(null, $usu[0]['id_area']);
+    $area = $areaController->buscarArea($usu[0]['id_area'], null);
+
     $ret = null;
     if ($_SESSION['tipo_usuario'] == 0) {
         $ret = $questaoController->buscarQuestao(null, true);
     } else {
         $ret = $questaoController->buscarQuestaoArea($area[0]['id']);
     }
-
-    $folder = $_SERVER['DOCUMENT_ROOT']."/sistema-bd-ufsj/Crawler/Questoes";
-    $acabou = false;
-    $error = false;
-    set_time_limit(0);
-
-    if (is_dir($folder)) {
-        $pastas = scandir($folder);
-        $r_area = false;
-        for ($i=2; $i<count($pastas); $i++) {
-            $nome_area = substr($pastas[$i], 0, -5);
-            $r_area = $areaController->buscarArea(null, $nome_area);
-        
-            if (!$r_area) {
-                $r_area = $areaController->adicionarArea($nome_area);
-            }
-            var_dump($nome_area);
-
-            $imagem = null;
-            $resposta = null;
-            $subpasta = dir($folder."/".$pastas[$i]);
-            $tem_questao = false;
-            while (false !== ($entry = $subpasta->read())) {
-                $resposta = null;
-                //salva a imagem da questao
-                if (substr($entry, strlen($entry)-3) == "jpg") {
-                    $imagem = $folder."/".$pastas[$i]."/".$entry;
-                    $tem_questao = true;
-                }
-                var_dump($entry);
-                if ($tem_questao && substr($entry, strlen($entry)-3) == "txt") {
-                    $r_file = fopen($folder."/".$pastas[$i]."/".$entry, "r");
-                    $resposta = fgets($r_file);
-                    if (strlen($resposta) == 1) {
-                        $data = ["id_area" => $r_area[0]['id'], 
-                                "tipo" => "F", 
-                                "enunciado" => null,
-                                "resposta" =>  $resposta,
-                                "num_acertos" => 0,
-                                "a" => "Alternativa A",
-                                "b" => "Alternativa B",
-                                "c" => "Alternativa C",
-                                "d" => "Alternativa D",
-                                "e" => "Alternativa E", ];
-                        
-                        $r = $questaoController->adicionarQuestao($data);
-                        // copia a imagem para a pasta da questão
-                        copy($imagem, $r['caminho']."/".substr($imagem, strlen($imagem) - 6));
-                    }
-                    $tem_questao = false;
-                }
-            }
-        }
-    } else {
-        $error = "Atenção!<p>Não foi identificado a pasta ../Crawler/Questoes contendo as questões obtidas! Execute o Crawler manualmente, e então atualize a página para salvar as informações no banco de dados.";
-    }
-
-    $acabou = true;
 
 ?>
 
@@ -214,7 +156,7 @@
                     for ($i=0; $i < count($ret); $i++) {
                         echo "<tr>";
                         echo "<td><center>".$ret[$i]['id']."</center></td>";
-                        echo "<td><center>".$area[0]['nome']."</center></td>";
+                        echo "<td><center>".$ret[$i]['id_area']."</center></td>";
                         echo "<td><center>".$ret[$i]['tipo']."</center></td>";
                         echo "<td><center>".$ret[$i]['enunciado']."</center></td>";
                         echo "<td><center>".$ret[$i]['resposta']."</center></td>";

@@ -30,7 +30,7 @@
     
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $area_nomes = $areaController->buscarArea(null, null);
-        $ret = $questaoController->buscarQuestao($_GET['id'], true);
+        $ret = $questaoController->buscarQuestao($_GET['id'], false);
         $id_questao = $ret[0]['id'];
         $enunciado = $ret[0]['enunciado'];
         $resposta = $ret[0]['resposta'];
@@ -138,8 +138,24 @@
         <!-- EDITAR AQUI-->          
 
         <div class="card card-register mx-auto mt-5">
-          <div class="card-header">Cadastrar uma nova questão</div>
+          <div class="card-header">Alterar uma questão</div>
           <div class="card-body">
+
+          <?php
+                $dir = "../../resources/".$ret[0]['id_area']."/".$ret[0]['id'];
+                if (file_exists($dir)) {
+                    $isDirEmpty = !(new \FilesystemIterator($dir))->valid();
+                    if (!$isDirEmpty) {
+                        $files = scandir($dir);
+                        for ($i = 0; $i < count($files); $i++) {
+                            if ($files[$i] != '.' && $files[$i] != '..') {
+                                echo '<div><center><br><img src="'.$dir.'/'.$files[$i].'" class="rounded" style="max-width:80%; max-height:80%;">';
+                                echo '<br>Figura '.($i-1).'</center></div>';
+                            }
+                        }
+                    }
+                }
+            ?>
             <form action="" method="post">
               <div class="form-group">
                 <div class="form-row" style="padding-bottom:10px;">
@@ -148,7 +164,7 @@
                         <div class="input-group-prepend col-md-2">
                             <label for="enunciado">Enunciado</label>
                         </div>
-                            <textarea class="form-control" id="enunciado" aria-label="Enunciado" name="enunciado" required><?php echo $enunciado?></textarea>
+                            <textarea class="form-control" id="enunciado" aria-label="Enunciado" name="enunciado"><?php echo $enunciado?></textarea>
                     </div>
                   </div>
                 </div>

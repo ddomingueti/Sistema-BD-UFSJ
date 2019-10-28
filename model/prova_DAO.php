@@ -149,6 +149,7 @@ class ProvaDao {
     public function alterarRespostaQuestao($data) {
         $query = 'UPDATE formada_por SET resposta_usuario=:resposta WHERE (id_prova=:id_prova AND id_questao=:id_questao)';
         try {
+            var_dump($data);
             $stmt = Conexao::get_instance()->get_conexao()->prepare($query);
             $stmt->bindParam(':resposta', $data['resposta']);
             $stmt->bindParam(':id_prova', $data['id_prova']);
